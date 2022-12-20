@@ -29,22 +29,40 @@ OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "1.png")),
 
 BAT = [pygame.image.load(os.path.join("Images/bat", "bat1.png")),
        pygame.image.load(os.path.join("Images/bat", "bat2.png"))]
-#BACKGROUND = pygame.image.load(os.path.join("Images/BG", ".png"))
 
-# Class to create the "cuco".
-class cuco:
-    # X and Y position of our "cuco" on the screen.
+#BACKGROUND = pygame.image.load(os.path.join("Images/bg", ".png"))
+
+# Class to create the "doggo".
+class doggo:
+    # X and Y position of our "doggo" on the screen.
     X_position = 80
     Y_Position = 310
+# This method will initialize the "doggo" whenever an object of this class is created.
+    def __init__(self):
+        # Include all of the images of the "doggo".
+        self.run_img = RUN
+        self.jump_img = JUMP
+        self.duck_img = DUCK
 
-    #def __init__
+        self.doggo_run = True
+        self.doggo_jump = False
+        self.doggo_duck = False
+
+        self.step_index = 0   # To animate the "doggo".
+        self.image = self.run_img[0]   # To initialize the first image, when our "doggo" is created
+        self.doggo_rectangle = self.image.get_rect()   # To get the rectangle of the "doggo" image (hitbox).
+        
+        # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 38-39. 
+        self.doggo_rectangle.x = self.X_position
+        self.doggo_rectangle.y = self.Y_Position
+    def update(self, UserInput):
 
 
 # Everything in pygame runs in a while loop.
 def main():
     run = True   # Flag to our while loop.
     clock = pygame.time.Clock()   # Clock to time our game.
-    player = cuco()   # Player is going to be an instance of the class "cuco"
+    player = doggo()   # Player is going to be an instance of the class "doggo"
 
     while run:
         for event in pygame.event.get(): # To exit the game safety/ We will set the flag in false whenever
@@ -55,8 +73,8 @@ def main():
         UserInput = pygame.key.get_pressed()
 
         # Two functions on the player object.
-        player.draw(SCREEN) # This function will draw our "cuco" onto the screen.
-        player.update(UserInput) # This function will update the "cuco" on every while loop iteration.
+        player.draw(SCREEN) # This function will draw our "doggo" onto the screen.
+        player.update(UserInput) # This function will update the "doggo" on every while loop iteration.
 
         clock.tick(30)   # Set the timing of the game.
         pygame.display.update()   # Update the display.
