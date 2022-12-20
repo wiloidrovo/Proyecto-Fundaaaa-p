@@ -37,6 +37,13 @@ class doggo:
     # X and Y position of our "doggo" on the screen.
     X_position = 80
     Y_Position = 310
+
+    # the position of the low image is different than the normal one, because the size is smaller
+    Y_Position_duck = 340
+
+    # this variable defines the velocity in which "doggo" will jump
+    jump_vel = 8.5
+
 # This method will initialize the "doggo" whenever an object of this class is created.
     def __init__(self):
         # Include all of the images of the "doggo".
@@ -64,6 +71,13 @@ class doggo:
         if self.doggo_duck:   # corresponding function will be called.
             self.duck()
 
+    # Function that manages the ducking of the dogoo
+    def duck(self):
+        self.image = self.duck_img[self.step_index // 5] # the funcionality is the same as the run function
+        self.dino_rect = self.image.get_rect()           # 
+        self.dino_rect.x = self.X_position
+        self.dino_rect.y = self.Y_Position_duck     #the difference is the position of the image
+        self.step_index += 1
 
 
 # Everything in pygame runs in a while loop.
