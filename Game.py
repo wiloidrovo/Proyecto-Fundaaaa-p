@@ -7,8 +7,8 @@ import os # Lead us interact and obtain information from the operative system (O
 pygame.init()
 
 # Define global constants.
-SCREEN_HEIGHT = 600
-SCREEN_WIDTH = 1100
+SCREEN_HEIGHT = 620
+SCREEN_WIDTH = 1200
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Load all the images of the game. 
@@ -35,14 +35,14 @@ BAT = [pygame.image.load(os.path.join("Images/bat", "bat1.png")),
 # Class to create the "doggo".
 class doggo:
     # X and Y position of our "doggo" on the screen.
-    X_position = 80
-    Y_Position = 310
+    X_position = 150
+    Y_Position = 350
 
     # the position of the low image is different than the normal one, because the size is smaller
-    Y_Position_duck = 340
+    #Y_Position_duck = 340
 
     # this variable defines the velocity in which "doggo" will jump
-    jump_vel = 8.5
+    #jump_vel = 8.5
 
 # This method will initialize the "doggo" whenever an object of this class is created.
     def __init__(self):
@@ -94,24 +94,24 @@ class doggo:
             self.doggo_jump = False
             self.doggo_duck = False
 
-    def run(self):
-        self.image = self.run_img[self.step_index // 5]
-        self.doggo_rectangle = self.image.get_rect()
-        self.doggo_rectangle.x = self.X_position
-        self.doggo_rectangle.y = self.Y_Position
-        self.step_index += 1
+    def run(self):   # Run function.
+        self.image = self.run_img[self.step_index // 5]  # This variable called image is set to the corresponding image of the "doggo" running.
+                                                         # The variable step_index helps us rotate through the individual images of the "doggo"
+                                                         # running in order to make it look like it's being animated.
+        self.doggo_rectangle = self.image.get_rect()     # To get the rectangle coord of the "doggo" image.
+        
+        self.doggo_rectangle.x = self.X_position         # To set the rectangle coord to the position on the
+        self.doggo_rectangle.y = self.Y_Position         # screen where we want the "doggo" to be displayed.
+        self.step_index += 1                             # Increment the step_index by 1.
+                                                         # When the step_index is between the values 0 and 5 the first image of our "doggo" is displayed
+                                                         # and when the step_index is between the values 5 and 10 the second image of our "doggo" is displayed.
+                                                         # and beyond the value of 10 the step_index is reset.
 
 #    def jump(self):
 
-    # Function that manages the ducking of the dogoo
-    def duck(self):
-        self.image = self.duck_img[self.step_index // 5] # the funcionality is the same as the run function
-        self.dino_rect = self.image.get_rect()           # 
-        self.dino_rect.x = self.X_position
-        self.dino_rect.y = self.Y_Position_duck     #the difference is the position of the image
-        self.step_index += 1
+#    def duck(self):
 
-    def draw(self, SCREEN):
+    def draw(self, SCREEN):   # This function blits the image onto the screen.
         SCREEN.blit(self.image, (self.doggo_rectangle.x, self.doggo_rectangle.y))
 
 # Everything in pygame runs in a while loop.
