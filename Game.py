@@ -12,11 +12,24 @@ SCREEN_WIDTH = 1100
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Load all the images of the game. 
-RUNNIG = 
-JUMPING = 
-DUCKING = 
-OBSTACLES = 
-BACKGROUND = pygame.image.load(os.path.join("Images/BG", ".png"))
+RUN = [pygame.image.load(os.path.join("Images/doggo", "run1.png")),
+          pygame.image.load(os.path.join("Images/doggo", "run2.png"))]
+
+JUMP = pygame.image.load(os.path.join("Images/doggo", "jump.png"))
+
+DUCK = [pygame.image.load(os.path.join("Images/doggo", "low1.png")),
+          pygame.image.load(os.path.join("Images/doggo", "low2.png"))]
+
+OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "1.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "2.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "3.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "4.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "5.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "6.png"))]
+
+BAT = [pygame.image.load(os.path.join("Images/bat", "bat1.png")),
+       pygame.image.load(os.path.join("Images/bat", "bat2.png"))]
+#BACKGROUND = pygame.image.load(os.path.join("Images/BG", ".png"))
 
 # Class to create the "cuco".
 class cuco:
@@ -24,7 +37,7 @@ class cuco:
     X_position = 80
     Y_Position = 310
 
-    def __init__
+    #def __init__
 
 
 # Everything in pygame runs in a while loop.
