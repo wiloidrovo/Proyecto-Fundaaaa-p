@@ -58,11 +58,11 @@ class doggo:
         self.step_index = 0   # To animate the "doggo".
         self.image = self.run_img[0]   # To initialize the first image, when our "doggo" is created
         self.doggo_rectangle = self.image.get_rect()   # To get the rectangle of the "doggo" image (hitbox).
-        
+
         # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 38-39. 
         self.doggo_rectangle.x = self.X_position
         self.doggo_rectangle.y = self.Y_Position
-    
+
     def update(self, UserInput):   # Update function, it updates the "doggo" on every while loop iteration.
         if self.doggo_run:    # This 3-line code block check
             self.run()        # the state for the "doggo", and
@@ -70,6 +70,38 @@ class doggo:
             self.jump()       # is running, jumping or ducking a
         if self.doggo_duck:   # corresponding function will be called.
             self.duck()
+
+        if self.step_index >= 10:   # This will be reset every 10 steps, this will help us to animate
+            self.step_index = 0     # the "dogo" further down the line.
+
+        # Statements that help us set the state our "doggo" is in.
+        if UserInput[pygame.K_UP] and not self.doggo_jump:
+        # If we press the up key on our keyboard and our "doggo" is not currently jumping 
+        # then we want to set the jumping state to True and the others to False.
+            self.doggo_run = False
+            self.doggo_jump = True
+            self.doggo_duck = False
+        elif UserInput[pygame.K_DOWN] and not self.doggo_jump:
+        # If we press the up down on our keyboard and our "doggo" is not currently jumping 
+        # then we want to set the ducking state to True and the others to False.
+            self.doggo_run = False
+            self.doggo_jump = False
+            self.doggo_duck = True
+        elif not (self.doggo_jump or UserInput[pygame.K_DOWN]):
+        # If the "doggo" is not jumping and the UserInput is not down so the "doggo"
+        # is not ducking then we want the "doggo" to just run and the others are False.
+            self.doggo_run = True  # (Probar poner UserInput[pygame.K_UP] en vez de self.doggo_jump en la linea anterior)
+            self.doggo_jump = False
+            self.doggo_duck = False
+
+    def run(self):
+        self.image = self.run_img[self.step_index // 5]
+        self.doggo_rectangle = self.image.get_rect()
+        self.doggo_rectangle.x = self.X_position
+        self.doggo_rectangle.y = self.Y_Position
+        self.step_index += 1
+
+#    def jump(self):
 
     # Function that manages the ducking of the dogoo
     def duck(self):
@@ -79,6 +111,8 @@ class doggo:
         self.dino_rect.y = self.Y_Position_duck     #the difference is the position of the image
         self.step_index += 1
 
+    def draw(self, SCREEN):
+        SCREEN.blit(self.image, (self.doggo_rectangle.x, self.doggo_rectangle.y))
 
 # Everything in pygame runs in a while loop.
 def main():
