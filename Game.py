@@ -24,6 +24,8 @@ class cuco:
     X_position = 80
     Y_Position = 310
 
+    def __init__
+
 
 # Everything in pygame runs in a while loop.
 def main():
