@@ -88,10 +88,18 @@ class doggo:
             self.doggo_duck = False
 
     def run(self):
+        self.image = self.run_img[self.step_index // 5]
+        self.doggo_rectangle = self.image.get_rect()
+        self.doggo_rectangle.x = self.X_position
+        self.doggo_rectangle.y = self.Y_Position
+        self.step_index += 1
 
 #    def jump(self):
 
 #    def duck(self):
+
+    def draw(self, SCREEN):
+        SCREEN.blit(self.image, (self.doggo_rectangle.x, self.doggo_rectangle.y))
 
 # Everything in pygame runs in a while loop.
 def main():
