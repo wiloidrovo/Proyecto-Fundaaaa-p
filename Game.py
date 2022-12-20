@@ -55,7 +55,15 @@ class doggo:
         # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 38-39. 
         self.doggo_rectangle.x = self.X_position
         self.doggo_rectangle.y = self.Y_Position
-    def update(self, UserInput):
+    
+    def update(self, UserInput):   # Update function, it updates the "doggo" on every while loop iteration.
+        if self.doggo_run:    # This 3-line code block check
+            self.run()        # the state for the "doggo", and
+        if self.doggo_jump:   # depending on whether the "doggo"
+            self.jump()       # is running, jumping or ducking a
+        if self.doggo_duck:   # corresponding function will be called.
+            self.duck()
+
 
 
 # Everything in pygame runs in a while loop.
