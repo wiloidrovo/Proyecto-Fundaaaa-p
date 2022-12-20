@@ -18,6 +18,13 @@ DUCKING =
 OBSTACLES = 
 BACKGROUND = pygame.image.load(os.path.join("Images/BG", ".png"))
 
+# Class to create the "cuco".
+class cuco:
+    # X and Y position of our "cuco" on the screen.
+    X_position = 80
+    Y_Position = 310
+
+
 # Everything in pygame runs in a while loop.
 def main():
     run = True   # Flag to our while loop.
