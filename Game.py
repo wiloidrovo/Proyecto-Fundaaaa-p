@@ -50,22 +50,6 @@ class doggo:
     # This variable defines the velocity in which "doggo" will jump
     JUMP_Velocity = 9.5
 
-class cloud:
-    def __init__(self):
-        self.x = SCREEN_WIDTH + random.randint(800, 1000)
-        self.y = random.randint(50, 100)
-        self.image = CLOUD
-        self.width = self.image.get_width()
-
-    def update(self):
-        self.x -= game_speed
-        if self.x < -self.width:
-            self.x = SCREEN_WIDTH + random.randint(2500, 3000)
-            self.y = random.randint(50, 100)
-
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.x, self.y))
-
 # This method will initialize the "doggo" whenever an object of this class is created.
     def __init__(self):
         # Include all of the images of the "doggo".
@@ -154,13 +138,29 @@ class cloud:
         SCREEN.blit(self.image, (self.doggo_rectangle.x, self.doggo_rectangle.y))
 
 # Everything in pygame runs in a while loop.
+class cloud:
+    def __init__(self):
+        self.x = SCREEN_WIDTH + random.randint(800, 1000)
+        self.y = random.randint(50, 100)
+        self.image = CLOUD
+        self.width = self.image.get_width()
+
+    def update(self):
+        self.x -= game_speed
+        if self.x < -self.width:
+            self.x = SCREEN_WIDTH + random.randint(2500, 3000)
+            self.y = random.randint(50, 100)
+
+    def draw(self, SCREEN):
+        SCREEN.blit(self.image, (self.x, self.y))
+
 def main():
     global game_speed   # This variable is to keep track how fast everything on our screen is moving.
     run = True   # Flag to our while loop.
     clock = pygame.time.Clock()   # Clock to time our game.
     player = doggo()   # Player is going to be an instance of the class "doggo".
-    Cloudd = cloud()
-    game_speed = 14
+    Cloud = cloud()
+    game_speed = 20
 
     while run:
         for event in pygame.event.get(): # To exit the game safety/ We will set the flag in false whenever
@@ -174,8 +174,8 @@ def main():
         player.draw(SCREEN) # This function will draw our "doggo" onto the screen.
         player.update(UserInput) # This function will update the "doggo" on every while loop iteration.
 
-        Cloudd.draw(SCREEN)
-        Cloudd.update()
+        Cloud.draw(SCREEN)
+        Cloud.update()
 
         clock.tick(30)   # Set the timing of the game.
         pygame.display.update()   # Update the display.
