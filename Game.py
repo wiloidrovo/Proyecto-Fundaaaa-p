@@ -137,22 +137,22 @@ class doggo:
     def draw(self, SCREEN):   # This function blits the image onto the screen.
         SCREEN.blit(self.image, (self.doggo_rectangle.x, self.doggo_rectangle.y))
 
-# Everything in pygame runs in a while loop.
 class cloud:
     def __init__(self):
-        self.x = SCREEN_WIDTH + random.randint(800, 1000)
-        self.y = random.randint(50, 100)
+        self.x = SCREEN_WIDTH + random.randint(1, 3)  # Specify the coord of the cloud when it is created.
+        self.y = random.randint(40, 80)
         self.image = CLOUD
         self.width = self.image.get_width()
 
-    def update(self):
+    def update(self):   # We make the cloud move from the right hand side of the screen to the left.
         self.x -= game_speed
+        # Whenever the cloud moves out of the screen we reset the coord of the cloud so that it apears again
         if self.x < -self.width:
-            self.x = SCREEN_WIDTH + random.randint(2500, 3000)
-            self.y = random.randint(50, 100)
+            self.x = SCREEN_WIDTH + random.randint(1, 3)
+            self.y = random.randint(40, 80)
 
     def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.x, self.y))
+        SCREEN.blit(self.image, (self.x, self.y))   # We just blit the image onto our screen.
 
 def main():
     global game_speed   # This variable is to keep track how fast everything on our screen is moving.
@@ -160,8 +160,9 @@ def main():
     clock = pygame.time.Clock()   # Clock to time our game.
     player = doggo()   # Player is going to be an instance of the class "doggo".
     Cloud = cloud()
-    game_speed = 20
+    game_speed = 15
 
+# Everything in pygame runs in a while loop.
     while run:
         for event in pygame.event.get(): # To exit the game safety/ We will set the flag in false whenever
                                          # we press the "X" in the corner of the window.
