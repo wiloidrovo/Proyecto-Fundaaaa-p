@@ -181,5 +181,4 @@ def main():
         clock.tick(30)   # Set the timing of the game.
         pygame.display.update()   # Update the display.
 
-
 main()
