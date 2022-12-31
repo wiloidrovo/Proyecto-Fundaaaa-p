@@ -188,7 +188,7 @@ class bat(obstacle):
     def __init__(self, image):
         self.type = 0
         super().__init__(image, self.type)
-        self.rect.y = 290
+        self.rect.y = 287
         self.index = 0
     def draw(self, SCREEN): # For the first five times this draw function is called, the first
         if self.index >= 11: # image of our bat is going to be shown. The next five times it is
