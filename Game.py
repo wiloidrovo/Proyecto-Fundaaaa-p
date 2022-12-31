@@ -11,7 +11,9 @@ SCREEN_HEIGHT = 660
 SCREEN_WIDTH = 1220
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-# Load all the images of the game. 
+# Load all the images of the game.
+START = pygame.image.load(os.path.join("Images/doggo", "start.png"))
+
 RUN = [pygame.image.load(os.path.join("Images/doggo", "run1.png")),
        pygame.image.load(os.path.join("Images/doggo", "run2.png"))]
 
@@ -208,6 +210,7 @@ def main():
     points = 0
     font = pygame.font.Font('Space-Explorer.ttf',35) # Font used to display the score.
     obstacles = []
+    death_count = 0
 
     def score():
         global game_speed, points
@@ -242,19 +245,22 @@ def main():
         player.draw(SCREEN) # This function will draw our "doggo" onto the screen.
         player.update(UserInput) # This function will update the "doggo" on every while loop iteration.
 
-        if len(obstacles) == 0:
-            if random.randint(0, 2) == 0:
-                obstacles.append(f_obst(F_OBSTACLES))
-            elif random.randint(0, 2) == 1:
-                obstacles.append(s_obst(S_OBSTACLES))
+        if len(obstacles) == 0:   # If the lenght of the obstacles' list is equal to 0,
+            if random.randint(0, 2) == 0: # then we want to randomly create either the
+                obstacles.append(f_obst(F_OBSTACLES)) # f_obst, the s_obst or the bat by
+            elif random.randint(0, 2) == 1: # by appending one of these objects to the
+                obstacles.append(s_obst(S_OBSTACLES)) # obstacles' list
             elif random.randint(0, 2) == 2:
                 obstacles.append(bat(BAT))
 
-        for obstacle in obstacles:
-            obstacle.draw(SCREEN)
+        for obstacle in obstacles: # We call the draw and update function on every
+            obstacle.draw(SCREEN)  # single obstacle on the obstacles' list.
             obstacle.update()
-            if player.doggo_rectangle.colliderect(obstacle.rect):
-                pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2)
+            if player.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
+                pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
+                pygame.time.delay(2000) # When we run into an obstacle I first want a small time delay before going to the main menu.
+                death_count += 1
+                menu(death_count) 
 
         track()
 
@@ -266,4 +272,34 @@ def main():
         clock.tick(30)   # Set the timing of the game.
         pygame.display.update()   # Update the display.
 
-main()
+def menu(death_count):
+    global points
+    run = True
+    while run:
+        SCREEN.fill((255, 255, 255))
+        font = pygame.font.Font('Space-Explorer.ttf',35)
+        
+        if death_count == 0:
+            text = font.render("Press any Key to Start", True, (0, 0, 0))
+            text_rect = text.get_rect()
+            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+            SCREEN.blit(text, text_rect)
+            SCREEN.blit(START, (SCREEN_WIDTH // 2 - 33, SCREEN_HEIGHT // 2 - 140))
+        elif death_count > 0:
+            text = font.render("Press any Key to Restart", True, (0, 0, 0))
+            score = font.render("Your score: " + str(points), True, (0, 0, 0))
+            score_rect = score.get_rect()
+            score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
+            SCREEN.blit(score, score_rect)
+            text_rect = text.get_rect()
+            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+            SCREEN.blit(text, text_rect)
+            SCREEN.blit(RESET, (SCREEN_WIDTH // 2 - 35, SCREEN_HEIGHT // 2 - 140))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.KEYUP:
+                main()
+
+menu(death_count=0)
