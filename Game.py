@@ -7,25 +7,26 @@ import random
 pygame.init()
 
 # Define global constants.
-SCREEN_HEIGHT = 620
-SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 660
+SCREEN_WIDTH = 1220
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Load all the images of the game. 
 RUN = [pygame.image.load(os.path.join("Images/doggo", "run1.png")),
-          pygame.image.load(os.path.join("Images/doggo", "run2.png"))]
+       pygame.image.load(os.path.join("Images/doggo", "run2.png"))]
 
 JUMP = pygame.image.load(os.path.join("Images/doggo", "jump.png"))
 
 DUCK = [pygame.image.load(os.path.join("Images/doggo", "low1.png")),
-          pygame.image.load(os.path.join("Images/doggo", "low2.png"))]
+        pygame.image.load(os.path.join("Images/doggo", "low2.png"))]
 
-OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "1.png")),
-             pygame.image.load(os.path.join("Images/obstacles", "2.png")),
-             pygame.image.load(os.path.join("Images/obstacles", "3.png")),
-             pygame.image.load(os.path.join("Images/obstacles", "4.png")),
-             pygame.image.load(os.path.join("Images/obstacles", "5.png")),
-             pygame.image.load(os.path.join("Images/obstacles", "6.png"))]
+F_OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "3.png")),
+               pygame.image.load(os.path.join("Images/obstacles", "5.png")),
+               pygame.image.load(os.path.join("Images/obstacles", "6.png"))]
+
+S_OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "1.png")),
+               pygame.image.load(os.path.join("Images/obstacles", "2.png")),
+               pygame.image.load(os.path.join("Images/obstacles", "4.png"))]
 
 BAT = [pygame.image.load(os.path.join("Images/bat", "bat1.png")),
        pygame.image.load(os.path.join("Images/bat", "bat2.png"))]
@@ -45,7 +46,7 @@ class doggo:
     Y_Position = 350
 
     # The image of the "doggo" ducking is smaller than the "doggo" running.
-    Y_Position_duck = 380
+    Y_Position_duck = 387
 
     # This variable defines the velocity in which "doggo" will jump
     JUMP_Velocity = 9.5
@@ -154,13 +155,79 @@ class cloud:
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.x, self.y))   # We just blit the image onto our screen.
 
+class obstacle:   # Parent class for all the obstacles.
+    def __init__(self, image, type):
+        self.image = image
+        self.type = type  # Type is going to be an integer value between 0 and 2 and it's going to determine
+                          # what type of obstacle image is going to be displayed on our screen.
+        self.rect = self.image[self.type].get_rect()  # To get the rectangle coord of the image which we're displaying.
+        self.rect.x = SCREEN_WIDTH  # To set the x coord of the obstacle to the screen width. / Whenever an obstacle is
+                                    # created, it is just off the edge of the right-hand side of the screen.
+
+    def update(self):  # This will help us move the obstacle across the screen.
+        self.rect.x -= game_speed  # We can do this by simply decreasing the x-coord of the rectangle of the image by the game speed.
+        if self.rect.x < -self.rect.width: # This if statement is going to help us remove the obstacle
+            obstacles.pop()   # as soon as it moves off the screen on the left-hand side.
+
+    def draw(self, SCREEN):
+        SCREEN.blit(self.image[self.type], self.rect)  # Here we're simply going to blit the image onto our screen.
+
+class f_obst(obstacle):  # This class inherit the class obstacle.
+    def __init__(self, image):
+        self.type = random.randint(0, 2) # Set the type to a random int between 0 and 2.
+        super().__init__(image, self.type) # To initialize the init method of the parent class (class obstacle).
+        self.rect.y = 350 # Set the y coord of where we want the obstacles to be displayed.
+
+class s_obst(obstacle):
+    def __init__(self, image):
+        self.type = random.randint(0, 2)
+        super().__init__(image, self.type)
+        self.rect.y = 350
+
+class bat(obstacle):
+    def __init__(self, image):
+        self.type = 0
+        super().__init__(image, self.type)
+        self.rect.y = 285
+        self.index = 0
+    def draw(self, SCREEN): # For the first five times this draw function is called, the first
+        if self.index >= 9: # image of our bat is going to be shown. The next five times it is
+            self.index = 0  # called, the second image of our bat is going to be shown and then
+        SCREEN.blit(self.image[self.index // 5], self.rect) # on the 11 th iteration we're gonna
+        self.index += 1     # reset the index back to zero. It makes the bat look animated.
+
 def main():
-    global game_speed   # This variable is to keep track how fast everything on our screen is moving.
+    global game_speed, x_position_track, y_position_track, points, obstacles # The variable game_speed is to keep track how fast everything on our screen is moving.
     run = True   # Flag to our while loop.
     clock = pygame.time.Clock()   # Clock to time our game.
     player = doggo()   # Player is going to be an instance of the class "doggo".
     Cloud = cloud()
-    game_speed = 15
+    game_speed = 14
+    x_position_track = 0
+    y_position_track = 444
+    points = 0
+    font = pygame.font.Font('Space-Explorer.ttf',35) # Font used to display the score.
+    obstacles = []
+
+    def score():
+        global game_speed, points
+        points += 1 # Every single time the function is called, we increment the variable points by 1.
+        if points % 100 == 0:  # Check and whenever points is multiple of 100 we increment the game_speed by 1 unit.
+            game_speed += 1                              # (210, 105, 30)
+        text = font.render("POINTS: " + str(points), True, (210, 105, 30)) # Display the text of our points on the screen.
+        text_rectangle = text.get_rect()   # Get the coord of the rectangle within wich the points are displayed.
+        text_rectangle.center = (1050, 40) # Set the rectangle center to the top right corner of the screen.
+        SCREEN.blit(text, text_rectangle)  # Blit text_rectangle on the screen.
+
+    def track():
+        global x_position_track, y_position_track      # Global coord of the track.
+        image_width = TRACK.get_width()                # Image width of our track image.
+        SCREEN.blit(TRACK, (x_position_track, y_position_track)) # Blit the image onto our screen.
+        SCREEN.blit(TRACK, (image_width + x_position_track, y_position_track)) # Behind the previous image we add this another one.
+        if x_position_track <= -image_width: # Whenever one track image moves off the screen, another one is created right after.
+            SCREEN.blit(TRACK, (image_width + x_position_track, y_position_track))
+            x_position_track = 0
+        x_position_track -= game_speed # From the x position of our track we subtract the game_speed.
 
 # Everything in pygame runs in a while loop.
     while run:
@@ -175,8 +242,26 @@ def main():
         player.draw(SCREEN) # This function will draw our "doggo" onto the screen.
         player.update(UserInput) # This function will update the "doggo" on every while loop iteration.
 
+        if len(obstacles) == 0:
+            if random.randint(0, 2) == 0:
+                obstacles.append(f_obst(F_OBSTACLES))
+            if random.randint(0, 2) == 1:
+                obstacles.append(s_obst(S_OBSTACLES))
+            if random.randint(0, 2) == 2:
+                obstacles.append(bat(BAT))
+
+        for obstacle in obstacles:
+            obstacle.draw(SCREEN)
+            obstacle.update()
+            if player.doggo_rectangle.colliderect(obstacle.rect):
+                pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2)
+
+        track()
+
         Cloud.draw(SCREEN)
         Cloud.update()
+
+        score()
 
         clock.tick(30)   # Set the timing of the game.
         pygame.display.update()   # Update the display.
