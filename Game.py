@@ -191,9 +191,9 @@ class bat(obstacle):
         self.rect.y = 285
         self.index = 0
     def draw(self, SCREEN): # For the first five times this draw function is called, the first
-        if self.index >= 9: # image of our bat is going to be shown. The next five times it is
+        if self.index >= 11: # image of our bat is going to be shown. The next five times it is
             self.index = 0  # called, the second image of our bat is going to be shown and then
-        SCREEN.blit(self.image[self.index // 5], self.rect) # on the 11 th iteration we're gonna
+        SCREEN.blit(self.image[self.index // 6], self.rect) # on the 11 th iteration we're gonna
         self.index += 1     # reset the index back to zero. It makes the bat look animated.
 
 def main():
@@ -245,9 +245,9 @@ def main():
         if len(obstacles) == 0:
             if random.randint(0, 2) == 0:
                 obstacles.append(f_obst(F_OBSTACLES))
-            if random.randint(0, 2) == 1:
+            elif random.randint(0, 2) == 1:
                 obstacles.append(s_obst(S_OBSTACLES))
-            if random.randint(0, 2) == 2:
+            elif random.randint(0, 2) == 2:
                 obstacles.append(bat(BAT))
 
         for obstacle in obstacles:
