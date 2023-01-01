@@ -61,6 +61,7 @@ class doggo:
         self.run_img = RUN
         self.jump_img = JUMP
         self.duck_img = DUCK
+        self.dead_img = DEAD
 
         self.doggo_run = True
         self.doggo_jump = False
@@ -71,7 +72,7 @@ class doggo:
         self.image = self.run_img[0]   # To initialize the first image, when our "doggo" is created
         self.doggo_rectangle = self.image.get_rect()   # To get the rectangle of the "doggo" image (hitbox).
 
-        # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 44-45. 
+        # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 49-50. 
         self.doggo_rectangle.x = self.X_Position
         self.doggo_rectangle.y = self.Y_Position
 
@@ -131,13 +132,15 @@ class doggo:
             self.doggo_jump = False
             self.jump_vel = self.JUMP_Velocity    # Reset the jump velocity of "doggo".
 
-
     def duck(self):   # Duck function. It is identical to the run function, but the only difference is the following:
         self.image = self.duck_img[self.step_index // 5] # We change the image of self.run_img for self.duck_img.
         self.doggo_rectangle = self.image.get_rect()
         self.doggo_rectangle.x = self.X_Position
         self.doggo_rectangle.y = self.Y_Position_duck    # We set the y position to Y_position_duck instead of Y_position.
         self.step_index += 1
+
+    def dead(self):
+        self.image = self.dead_img
 
     def draw(self, SCREEN):   # This function blits the image onto the screen.
         SCREEN.blit(self.image, (self.doggo_rectangle.x, self.doggo_rectangle.y))
@@ -300,7 +303,6 @@ def menu(death_count):
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                #run = False
                 pygame.quit()
                 exit()
             if event.type == pygame.KEYUP:
