@@ -24,13 +24,12 @@ DUCK = [pygame.image.load(os.path.join("Images/doggo", "low1.png")),
 
 DEAD = pygame.image.load(os.path.join("Images/doggo", "dead.png"))
 
-F_OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "3.png")),
-               pygame.image.load(os.path.join("Images/obstacles", "5.png")),
-               pygame.image.load(os.path.join("Images/obstacles", "6.png"))]
-
-S_OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "1.png")),
-               pygame.image.load(os.path.join("Images/obstacles", "2.png")),
-               pygame.image.load(os.path.join("Images/obstacles", "4.png"))]
+OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "1.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "2.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "3.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "4.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "5.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "6.png"))]
 
 BAT = [pygame.image.load(os.path.join("Images/bat", "bat1.png")),
        pygame.image.load(os.path.join("Images/bat", "bat2.png"))]
@@ -182,17 +181,11 @@ class obstacle:   # Parent class for all the obstacles.
     def draw(self, SCREEN):
         SCREEN.blit(self.image[self.type], self.rect)  # Here we're simply going to blit the image onto our screen.
 
-class f_obst(obstacle):  # This class inherit the class obstacle.
+class obst(obstacle):  # This class inherit the class obstacle.
     def __init__(self, image):
-        self.type = random.randint(0, 2) # Set the type to a random int between 0 and 2.
+        self.type = random.randint(0, 5) # Set the type to a random int between 0 and 5.
         super().__init__(image, self.type) # To initialize the init method of the parent class (class obstacle).
         self.rect.y = 350 # Set the y coord of where we want the obstacles to be displayed.
-
-class s_obst(obstacle):
-    def __init__(self, image):
-        self.type = random.randint(0, 2)
-        super().__init__(image, self.type)
-        self.rect.y = 350
 
 class bat(obstacle):
     def __init__(self, image):
@@ -254,11 +247,12 @@ def main():
         player.update(UserInput) # This function will update the "doggo" on every while loop iteration.
 
         if len(obstacles) == 0:   # If the lenght of the obstacles' list is equal to 0,
-            if random.randint(0, 2) == 0: # then we want to randomly create either the
-                obstacles.append(f_obst(F_OBSTACLES)) # f_obst, the s_obst or the bat by
-            elif random.randint(0, 2) == 1: # by appending one of these objects to the
-                obstacles.append(s_obst(S_OBSTACLES)) # obstacles' list
-            elif random.randint(0, 2) == 2:
+            if random.randint(0, 1) == 0: # then we want to randomly create either the
+                #obstacles.append(f_obst(F_OBSTACLES)) # f_obst, the s_obst or the bat by
+                obstacles.append(obst(OBSTACLES))
+            #elif random.randint(0, 2) == 1: # by appending one of these objects to the
+            #    obstacles.append(s_obst(S_OBSTACLES)) # obstacles' list
+            elif random.randint(0, 1) == 1:
                 obstacles.append(bat(BAT))
 
         for obstacle in obstacles: # We call the draw and update function on every
