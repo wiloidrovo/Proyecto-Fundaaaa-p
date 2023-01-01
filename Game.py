@@ -248,11 +248,8 @@ def main():
 
         if len(obstacles) == 0:   # If the lenght of the obstacles' list is equal to 0,
             if random.randint(0, 1) == 0: # then we want to randomly create either the
-                #obstacles.append(f_obst(F_OBSTACLES)) # f_obst, the s_obst or the bat by
-                obstacles.append(obst(OBSTACLES))
-            #elif random.randint(0, 2) == 1: # by appending one of these objects to the
-            #    obstacles.append(s_obst(S_OBSTACLES)) # obstacles' list
-            elif random.randint(0, 1) == 1:
+                obstacles.append(obst(OBSTACLES)) # obst or the bat by appending one of
+            elif random.randint(0, 1) == 1: # these objects to the obstacles' list.
                 obstacles.append(bat(BAT))
 
         for obstacle in obstacles: # We call the draw and update function on every
