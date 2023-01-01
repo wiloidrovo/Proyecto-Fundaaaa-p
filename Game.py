@@ -141,13 +141,16 @@ class doggo:
 
     def dead(self):
         self.image = self.dead_img
+        self.doggo_rectangle.x = self.X_Position
+        self.doggo_rectangle.y = self.Y_Position
+
 
     def draw(self, SCREEN):   # This function blits the image onto the screen.
         SCREEN.blit(self.image, (self.doggo_rectangle.x, self.doggo_rectangle.y))
 
 class cloud:
     def __init__(self):
-        self.x = SCREEN_WIDTH + random.randint(1, 3)  # Specify the coord of the cloud when it is created.
+        self.x = SCREEN_WIDTH  # Specify the coord of the cloud when it is created.
         self.y = random.randint(40, 80)
         self.image = CLOUD
         self.width = self.image.get_width()
@@ -156,7 +159,7 @@ class cloud:
         self.x -= game_speed
         # Whenever the cloud moves out of the screen we reset the coord of the cloud so that it apears again
         if self.x < -self.width:
-            self.x = SCREEN_WIDTH + random.randint(1, 3)
+            self.x = SCREEN_WIDTH
             self.y = random.randint(40, 80)
 
     def draw(self, SCREEN):
@@ -263,7 +266,9 @@ def main():
             obstacle.update()
             if player.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
                 # pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
+                #SCREEN.blit(DEAD, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
                 pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
+                SCREEN.blit(DEAD, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
                 death_count += 1
                 menu(death_count) 
 
@@ -303,9 +308,10 @@ def menu(death_count):
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
+                run = False
             if event.type == pygame.KEYUP:
                 main()
+    pygame.quit()
+    exit()
 
 menu(death_count=0)
