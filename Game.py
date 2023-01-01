@@ -217,7 +217,7 @@ def main():
         points += 1 # Every single time the function is called, we increment the variable points by 1.
         if points % 100 == 0:  # Check and whenever points is multiple of 100 we increment the game_speed by 1 unit.
             game_speed += 1                              # (210, 105, 30)
-        text = font.render("POINTS: " + str(points), True, (210, 105, 30)) # Display the text of our points on the screen.
+        text = font.render("POINTS: " + str(points), True, (125, 31, 28)) # Display the text of our points on the screen.
         text_rectangle = text.get_rect()   # Get the coord of the rectangle within wich the points are displayed.
         text_rectangle.center = (1050, 40) # Set the rectangle center to the top right corner of the screen.
         SCREEN.blit(text, text_rectangle)  # Blit text_rectangle on the screen.
@@ -258,7 +258,7 @@ def main():
             obstacle.update()
             if player.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
                 pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
-                pygame.time.delay(2000) # When we run into an obstacle I first want a small time delay before going to the main menu.
+                pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
                 death_count += 1
                 menu(death_count) 
 
@@ -277,24 +277,24 @@ def menu(death_count):
     run = True
     while run:
         SCREEN.fill((255, 255, 255))
-        font = pygame.font.Font('Space-Explorer.ttf',35)
+        font = pygame.font.Font('Space-Explorer.ttf',30)
         
         if death_count == 0:
-            text = font.render("Press any Key to Start", True, (0, 0, 0))
+            text = font.render("Press any Key to Start", True, (125, 31, 28))
             text_rect = text.get_rect()
             text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
             SCREEN.blit(text, text_rect)
             SCREEN.blit(START, (SCREEN_WIDTH // 2 - 33, SCREEN_HEIGHT // 2 - 140))
         else:
-            text = font.render("Press any Key to Restart", True, (0, 0, 0))
-            score = font.render("Your score: " + str(points), True, (0, 0, 0))
+            text = font.render("Press any Key to Restart", True, (125, 31, 28))
+            score = font.render("Your score: " + str(points), True, (125, 31, 28))
             score_rect = score.get_rect()
-            score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
+            score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 140)
             SCREEN.blit(score, score_rect)
             text_rect = text.get_rect()
-            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 180)
             SCREEN.blit(text, text_rect)
-            SCREEN.blit(RESET, (SCREEN_WIDTH // 2 - 35, SCREEN_HEIGHT // 2 - 140))
+            SCREEN.blit(GAMEOVER, (SCREEN_WIDTH // 2 - 200, SCREEN_HEIGHT // 2 - 335))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
