@@ -22,6 +22,8 @@ JUMP = pygame.image.load(os.path.join("Images/doggo", "jump.png"))
 DUCK = [pygame.image.load(os.path.join("Images/doggo", "low1.png")),
         pygame.image.load(os.path.join("Images/doggo", "low2.png"))]
 
+DEAD = pygame.image.load(os.path.join("Images/doggo", "dead.png"))
+
 F_OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "3.png")),
                pygame.image.load(os.path.join("Images/obstacles", "5.png")),
                pygame.image.load(os.path.join("Images/obstacles", "6.png"))]
@@ -257,7 +259,7 @@ def main():
             obstacle.draw(SCREEN)  # single obstacle on the obstacles' list.
             obstacle.update()
             if player.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
-                pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
+                # pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
                 pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
                 death_count += 1
                 menu(death_count) 
