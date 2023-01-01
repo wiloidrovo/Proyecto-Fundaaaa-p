@@ -287,7 +287,7 @@ def menu(death_count):
             text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
             SCREEN.blit(text, text_rect)
             SCREEN.blit(START, (SCREEN_WIDTH // 2 - 33, SCREEN_HEIGHT // 2 - 140))
-        elif death_count > 0:
+        else:
             text = font.render("Press any Key to Restart", True, (125, 31, 28))
             score = font.render("Your score: " + str(points), True, (125, 31, 28))
             score_rect = score.get_rect()
@@ -300,7 +300,9 @@ def menu(death_count):
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                #run = False
+                pygame.quit()
+                exit()
             if event.type == pygame.KEYUP:
                 main()
 
