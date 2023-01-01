@@ -22,13 +22,14 @@ JUMP = pygame.image.load(os.path.join("Images/doggo", "jump.png"))
 DUCK = [pygame.image.load(os.path.join("Images/doggo", "low1.png")),
         pygame.image.load(os.path.join("Images/doggo", "low2.png"))]
 
-F_OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "3.png")),
-               pygame.image.load(os.path.join("Images/obstacles", "5.png")),
-               pygame.image.load(os.path.join("Images/obstacles", "6.png"))]
+DEAD = pygame.image.load(os.path.join("Images/doggo", "dead.png"))
 
-S_OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "1.png")),
-               pygame.image.load(os.path.join("Images/obstacles", "2.png")),
-               pygame.image.load(os.path.join("Images/obstacles", "4.png"))]
+OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "1.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "2.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "3.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "4.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "5.png")),
+             pygame.image.load(os.path.join("Images/obstacles", "6.png"))]
 
 BAT = [pygame.image.load(os.path.join("Images/bat", "bat1.png")),
        pygame.image.load(os.path.join("Images/bat", "bat2.png"))]
@@ -61,6 +62,7 @@ class doggo:
         self.run_img = RUN
         self.jump_img = JUMP
         self.duck_img = DUCK
+        self.dead_img = DEAD
 
         self.doggo_run = True
         self.doggo_jump = False
@@ -71,7 +73,7 @@ class doggo:
         self.image = self.run_img[0]   # To initialize the first image, when our "doggo" is created
         self.doggo_rectangle = self.image.get_rect()   # To get the rectangle of the "doggo" image (hitbox).
 
-        # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 44-45. 
+        # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 49-50. 
         self.doggo_rectangle.x = self.X_Position
         self.doggo_rectangle.y = self.Y_Position
 
@@ -131,13 +133,18 @@ class doggo:
             self.doggo_jump = False
             self.jump_vel = self.JUMP_Velocity    # Reset the jump velocity of "doggo".
 
-
-    def duck(self):   # Duck function. It is identical to the runCLOUD function, but the only difference is the following:
+    def duck(self):   # Duck function. It is identical to the run function, but the only difference is the following:
         self.image = self.duck_img[self.step_index // 5] # We change the image of self.run_img for self.duck_img.
         self.doggo_rectangle = self.image.get_rect()
         self.doggo_rectangle.x = self.X_Position
         self.doggo_rectangle.y = self.Y_Position_duck    # We set the y position to Y_position_duck instead of Y_position.
         self.step_index += 1
+
+    def dead(self):
+        self.image = self.dead_img
+        self.doggo_rectangle.x = self.X_Position
+        self.doggo_rectangle.y = self.Y_Position
+
 
     def draw(self, SCREEN):   # This function blits the image onto the screen.
         SCREEN.blit(self.image, (self.doggo_rectangle.x, self.doggo_rectangle.y))
@@ -176,17 +183,11 @@ class obstacle:   # Parent class for all the obstacles.
     def draw(self, SCREEN):
         SCREEN.blit(self.image[self.type], self.rect)  # Here we're simply going to blit the image onto our screen.
 
-class f_obst(obstacle):  # This class inherit the class obstacle.
+class obst(obstacle):  # This class inherit the class obstacle.
     def __init__(self, image):
-        self.type = random.randint(0, 2) # Set the type to a random int between 0 and 2.
+        self.type = random.randint(0, 5) # Set the type to a random int between 0 and 5.
         super().__init__(image, self.type) # To initialize the init method of the parent class (class obstacle).
         self.rect.y = 350 # Set the y coord of where we want the obstacles to be displayed.
-
-class s_obst(obstacle):
-    def __init__(self, image):
-        self.type = random.randint(0, 2)
-        super().__init__(image, self.type)
-        self.rect.y = 350
 
 class bat(obstacle):
     def __init__(self, image):
@@ -261,19 +262,19 @@ def main():
         player.update(UserInput) # This function will update the "doggo" on every while loop iteration.
 
         if len(obstacles) == 0:   # If the lenght of the obstacles' list is equal to 0,
-            if random.randint(0, 2) == 0: # then we want to randomly create either the
-                obstacles.append(f_obst(F_OBSTACLES)) # f_obst, the s_obst or the bat by
-            elif random.randint(0, 2) == 1: # by appending one of these objects to the
-                obstacles.append(s_obst(S_OBSTACLES)) # obstacles' list
-            elif random.randint(0, 2) == 2:
+            if random.randint(0, 1) == 0: # then we want to randomly create either the
+                obstacles.append(obst(OBSTACLES)) # obst or the bat by appending one of
+            elif random.randint(0, 1) == 1: # these objects to the obstacles' list.
                 obstacles.append(bat(BAT))
 
         for obstacle in obstacles: # We call the draw and update function on every
             obstacle.draw(SCREEN)  # single obstacle on the obstacles' list.
             obstacle.update()
             if player.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
-                pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
+                # pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
+                #SCREEN.blit(DEAD, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
                 pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
+                SCREEN.blit(DEAD, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
                 death_count += 1
                 menu(death_count) 
 
