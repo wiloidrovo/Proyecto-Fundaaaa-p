@@ -41,6 +41,8 @@ RESET = pygame.image.load(os.path.join("Images/other", "reset.png"))
 
 TRACK = pygame.image.load(os.path.join("Images/other", "track.png"))
 
+BACKGROUND = pygame.image.load(os.path.join("Images/other", "back.png"))
+
 # Class to create the "doggo".
 class doggo:
     # X and Y position of our "doggo" on the screen.
@@ -130,7 +132,7 @@ class doggo:
             self.jump_vel = self.JUMP_Velocity    # Reset the jump velocity of "doggo".
 
 
-    def duck(self):   # Duck function. It is identical to the run function, but the only difference is the following:
+    def duck(self):   # Duck function. It is identical to the runCLOUD function, but the only difference is the following:
         self.image = self.duck_img[self.step_index // 5] # We change the image of self.run_img for self.duck_img.
         self.doggo_rectangle = self.image.get_rect()
         self.doggo_rectangle.x = self.X_Position
@@ -140,22 +142,22 @@ class doggo:
     def draw(self, SCREEN):   # This function blits the image onto the screen.
         SCREEN.blit(self.image, (self.doggo_rectangle.x, self.doggo_rectangle.y))
 
-class cloud:
-    def __init__(self):
-        self.x = SCREEN_WIDTH + random.randint(1, 3)  # Specify the coord of the cloud when it is created.
-        self.y = random.randint(40, 80)
-        self.image = CLOUD
-        self.width = self.image.get_width()
+# class cloud:
+#     def __init__(self):
+#         self.x = SCREEN_WIDTH + random.randint(1, 3)  # Specify the coord of the cloud when it is created.
+#         self.y = random.randint(40, 80)
+#         self.image = CLOUD
+#         self.width = self.image.get_width()
 
-    def update(self):   # We make the cloud move from the right hand side of the screen to the left.
-        self.x -= game_speed
-        # Whenever the cloud moves out of the screen we reset the coord of the cloud so that it apears again
-        if self.x < -self.width:
-            self.x = SCREEN_WIDTH + random.randint(1, 3)
-            self.y = random.randint(40, 80)
+#     def update(self):   # We make the cloud move from the right hand side of the screen to the left.
+#         self.x -= game_speed
+#         # Whenever the cloud moves out of the screen we reset the coord of the cloud so that it apears again
+#         if self.x < -self.width:
+#             self.x = SCREEN_WIDTH + random.randint(1, 3)
+#             self.y = random.randint(40, 80)
 
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.x, self.y))   # We just blit the image onto our screen.
+#     def draw(self, SCREEN):
+#         SCREEN.blit(self.image, (self.x, self.y))   # We just blit the image onto our screen.
 
 class obstacle:   # Parent class for all the obstacles.
     def __init__(self, image, type):
@@ -199,14 +201,16 @@ class bat(obstacle):
         self.index += 1     # reset the index back to zero. It makes the bat look animated.
 
 def main():
-    global game_speed, x_position_track, y_position_track, points, obstacles # The variable game_speed is to keep track how fast everything on our screen is moving.
+    global game_speed, x_position_track, y_position_track, points, obstacles, x_position_back, y_position_back # The variable game_speed is to keep track how fast everything on our screen is moving.
     run = True   # Flag to our while loop.
     clock = pygame.time.Clock()   # Clock to time our game.
     player = doggo()   # Player is going to be an instance of the class "doggo".
-    Cloud = cloud()
+    #Cloud = cloud()
     game_speed = 14
     x_position_track = 0
     y_position_track = 444
+    x_position_back = 0
+    y_position_back = 15
     points = 0
     font = pygame.font.Font('Space-Explorer.ttf',35) # Font used to display the score.
     obstacles = []
@@ -232,6 +236,16 @@ def main():
             x_position_track = 0
         x_position_track -= game_speed # From the x position of our track we subtract the game_speed.
 
+    def background():
+        global x_position_back, y_position_back     
+        image_width = BACKGROUND.get_width()                
+        SCREEN.blit(BACKGROUND, (x_position_back, y_position_back)) # Blit the image onto our screen.
+        SCREEN.blit(BACKGROUND, (image_width + x_position_back, y_position_back)) # Behind the previous image we add this another one.
+        if x_position_back <= -image_width: # Whenever one track image moves off the screen, another one is created right after.
+            SCREEN.blit(BACKGROUND, (image_width + x_position_back, y_position_back))
+            x_position_back = 0
+        x_position_back -= game_speed # From the x position of our track we subtract the game_speed.
+
 # Everything in pygame runs in a while loop.
     while run:
         for event in pygame.event.get(): # To exit the game safety/ We will set the flag in false whenever
@@ -239,6 +253,7 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
         SCREEN.fill((255, 228, 225)) # Fill the screen with color white on every while loop iteration.
+        background()
         UserInput = pygame.key.get_pressed()
 
         # Two functions on the player object.
@@ -264,8 +279,8 @@ def main():
 
         track()
 
-        Cloud.draw(SCREEN)
-        Cloud.update()
+        #Cloud.draw(SCREEN)
+        #Cloud.update()
 
         score()
 
@@ -276,7 +291,7 @@ def menu(death_count):
     global points
     run = True
     while run:
-        SCREEN.fill((255, 255, 255))
+        SCREEN.fill((255, 228, 225))
         font = pygame.font.Font('Space-Explorer.ttf',30)
         
         if death_count == 0:
@@ -298,10 +313,10 @@ def menu(death_count):
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                #run = False
-                pygame.quit()
-                exit()
+                run = False
             if event.type == pygame.KEYUP:
                 main()
+    pygame.quit()
+    exit()
 
 menu(death_count=0)
