@@ -7,9 +7,11 @@ import random
 pygame.init()
 
 # Define global constants.
-SCREEN_HEIGHT = 660
-SCREEN_WIDTH = 1220
+SCREEN_HEIGHT = 690
+SCREEN_WIDTH = 1360
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+pygame.display.set_caption("DOGGO GAME >:)")
 
 # Load all the images of the game.
 START = pygame.image.load(os.path.join("Images/doggo", "start.png"))
@@ -42,6 +44,15 @@ TRACK = pygame.image.load(os.path.join("Images/other", "track.png"))
 
 BACKGROUND = pygame.image.load(os.path.join("Images/other", "back.png"))
 
+SHORTFAR = pygame.mixer.Sound('shortfar.wav')
+
+CARTOON = pygame.mixer.Sound('cartoon.wav')
+
+#MUSIC = pygame.mixer.music.load('mpb.mp3')
+MUSIC = pygame.mixer.music.load('Hotel Room Winnie Poh.mp3')
+#MUSIC = pygame.mixer.music.load('ñañaña.mp3')
+#pygame.mixer.music.play()
+
 # Class to create the "doggo".
 class doggo:
     # X and Y position of our "doggo" on the screen.
@@ -72,7 +83,7 @@ class doggo:
         self.image = self.run_img[0]   # To initialize the first image, when our "doggo" is created
         self.doggo_rectangle = self.image.get_rect()   # To get the rectangle of the "doggo" image (hitbox).
 
-        # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 49-50. 
+        # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 59-60. 
         self.doggo_rectangle.x = self.X_Position
         self.doggo_rectangle.y = self.Y_Position
 
@@ -217,7 +228,7 @@ def main():
             game_speed += 1                              # (210, 105, 30)
         text = font.render("POINTS: " + str(points), True, (125, 31, 28)) # Display the text of our points on the screen.
         text_rectangle = text.get_rect()   # Get the coord of the rectangle within wich the points are displayed.
-        text_rectangle.center = (1050, 40) # Set the rectangle center to the top right corner of the screen.
+        text_rectangle.center = (1200, 40) # Set the rectangle center to the top right corner of the screen.
         SCREEN.blit(text, text_rectangle)  # Blit text_rectangle on the screen.
 
     def track():
@@ -231,7 +242,7 @@ def main():
         x_position_track -= game_speed # From the x position of our track we subtract the game_speed.
 
     def background():
-        global x_position_back, y_position_back     
+        global x_position_back, y_position_back  
         image_width = BACKGROUND.get_width()                
         SCREEN.blit(BACKGROUND, (x_position_back, y_position_back)) # Blit the image onto our screen.
         SCREEN.blit(BACKGROUND, (image_width + x_position_back, y_position_back)) # Behind the previous image we add this another one.
@@ -242,8 +253,7 @@ def main():
 
 # Everything in pygame runs in a while loop.
     while run:
-        for event in pygame.event.get(): # To exit the game safety/ We will set the flag in false whenever
-                                         # we press the "X" in the corner of the window.
+        for event in pygame.event.get(): # To exit the game safety/ We set the flag in false whenever we press the "X".
             if event.type == pygame.QUIT:
                 run = False
         SCREEN.fill((255, 228, 225)) # Fill the screen with color white on every while loop iteration.
@@ -267,7 +277,7 @@ def main():
                 pygame.display.update()
                 pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
                 death_count += 1
-                menu(death_count) 
+                menu(death_count)
 
         # Two functions on the player object.
         player.draw(SCREEN) # This function will draw our "doggo" onto the screen.
@@ -283,6 +293,7 @@ def menu(death_count):
     global points
     run = True
     while run:
+        pygame.mixer.music.play()
         SCREEN.fill((255, 228, 225))
         font = pygame.font.Font('Space-Explorer.ttf',30)
         
@@ -308,8 +319,9 @@ def menu(death_count):
                 run = False
             space = pygame.key.get_pressed() # get_pressed returns the state of all the keyboard keys as a bolean. 
             if space[pygame.K_SPACE] == True:
+                CARTOON.play()
                 main()
     pygame.quit()
-    exit()
+    #exit()
 
 menu(death_count=0)
