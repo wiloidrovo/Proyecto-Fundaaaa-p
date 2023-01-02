@@ -60,10 +60,12 @@ class doggo:
         self.run_img = RUN
         self.jump_img = JUMP
         self.duck_img = DUCK
+        self.dead_img = DEAD
 
         self.doggo_run = True
         self.doggo_jump = False
         self.doggo_duck = False
+        self.doggo_dead = False
 
         self.step_index = 0   # To animate the "doggo".
         self.jump_vel = self.JUMP_Velocity  # We initialize the jumping velocity of the "doggo" to the JUMP_Velocity that we just defined before.
@@ -74,36 +76,48 @@ class doggo:
         self.doggo_rectangle.x = self.X_Position
         self.doggo_rectangle.y = self.Y_Position
 
-    def update(self, UserInput):    # Update function, it updates the "doggo" on every while loop iteration.
-        if self.doggo_run:          # This 3-line code block check
-            self.run()              # the state for the "doggo", and
-        if self.doggo_jump:         # depending on whether the "doggo"
-            self.jump()             # is running, jumping or ducking a
-        if self.doggo_duck:         # corresponding function will be called.
-            self.duck()
+    def update(self, UserInput, death = False):    # Update function, it updates the "doggo" on every while loop iteration.
+        if death:
+            self.doggo_dead = True
+            self.dead()
+        else:
+            if self.doggo_run:          # This 3-line code block check
+                self.run()              # the state for the "doggo", and
+            if self.doggo_jump:         # depending on whether the "doggo"
+                self.jump()             # is running, jumping or ducking a
+            if self.doggo_duck:         # corresponding function will be called.
+                self.duck()
 
         if self.step_index >= 10:   # This will be reset every 10 steps, this will help us to animate
             self.step_index = 0     # the "dogo" further down the line.
 
         # Statements that help us set the state our "doggo" is in.
-        if UserInput[pygame.K_UP] and not self.doggo_jump:
+        if UserInput[pygame.K_UP] and not self.doggo_jump and not death:
         # If we press the up key on our keyboard and our "doggo" is not currently jumping 
         # then we want to set the jumping state to True and the others to False.
             self.doggo_run = False
             self.doggo_jump = True
             self.doggo_duck = False
-        elif UserInput[pygame.K_DOWN] and not self.doggo_jump:
+            self.doggo_dead = False
+        elif UserInput[pygame.K_DOWN] and not self.doggo_jump and not death:
         # If we press the up down on our keyboard and our "doggo" is not currently jumping 
         # then we want to set the ducking state to True and the others to False.
             self.doggo_run = False
             self.doggo_jump = False
             self.doggo_duck = True
-        elif not (self.doggo_jump or UserInput[pygame.K_DOWN]):
+            self.doggo_dead = False
+        elif not (self.doggo_jump or UserInput[pygame.K_DOWN]) and not death:
         # If the "doggo" is not jumping and the UserInput is not down so the "doggo"
         # is not ducking then we want the "doggo" to just run and the others are False.
             self.doggo_run = True  # (Probar poner UserInput[pygame.K_UP] en vez de self.doggo_jump en la linea anterior)
             self.doggo_jump = False
             self.doggo_duck = False
+            self.doggo_dead = False
+        elif death and not self.doggo_jump:
+            self.doggo_run = False
+            self.doggo_jump = False 
+            self.doggo_duck = False
+            self.doggo_dead = True
 
     def run(self):   # Run function.
         self.image = self.run_img[self.step_index // 5]  # This variable called image is set to the corresponding image of the "doggo" running.
@@ -136,6 +150,12 @@ class doggo:
         self.doggo_rectangle.x = self.X_Position
         self.doggo_rectangle.y = self.Y_Position_duck    # We set the y position to Y_position_duck instead of Y_position.
         self.step_index += 1
+
+    def dead(self):
+        self.image = self.dead_img
+        if self.doggo_rectangle.y > self.Y_Position:
+            self.doggo_rectangle.y = self.Y_Position
+
 
     def draw(self, SCREEN):   # This function blits the image onto the screen.
         SCREEN.blit(self.image, (self.doggo_rectangle.x, self.doggo_rectangle.y))
@@ -230,10 +250,6 @@ def main():
         background()
         UserInput = pygame.key.get_pressed()
 
-        # Two functions on the player object.
-        player.draw(SCREEN) # This function will draw our "doggo" onto the screen.
-        player.update(UserInput) # This function will update the "doggo" on every while loop iteration.
-
         if len(obstacles) == 0:   # If the lenght of the obstacles' list is equal to 0,
             if random.randint(0, 1) == 0: # then we want to randomly create either the
                 obstacles.append(obst(OBSTACLES)) # obst or the bat by appending one of
@@ -244,11 +260,18 @@ def main():
             obstacle.draw(SCREEN)  # single obstacle on the obstacles' list.
             obstacle.update()
             if player.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
-                #pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
+                player.update(UserInput, True)
+                player.draw(SCREEN)
+                track()
+                pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
+                pygame.display.update()
                 pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
                 death_count += 1
                 menu(death_count) 
 
+        # Two functions on the player object.
+        player.draw(SCREEN) # This function will draw our "doggo" onto the screen.
+        player.update(UserInput) # This function will update the "doggo" on every while loop iteration.
         track()
 
         score()
