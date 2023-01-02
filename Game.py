@@ -46,8 +46,8 @@ SHORTFAR = pygame.mixer.Sound('shortfar.wav')
 
 CARTOON = pygame.mixer.Sound('cartoon.wav')
 
-MUSIC = pygame.mixer.music.load('mpb.mp3')
-#MUSIC = pygame.mixer.music.load('Hotel Room Winnie Poh.mp3')
+#MUSIC = pygame.mixer.music.load('mpb.mp3')
+MUSIC = pygame.mixer.music.load('Hotel Room Winnie Poh.mp3')
 #MUSIC = pygame.mixer.music.load('ñañaña.mp3')
 #pygame.mixer.music.play()
 
