@@ -10,6 +10,8 @@ pygame.init()
 SCREEN_HEIGHT = 690
 SCREEN_WIDTH = 1360
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+#SCREEN = pygame.display.set_mode()
+#SCREEN_WIDTH, SCREEN_HEIGHT = SCREEN.get_size()
 
 pygame.display.set_caption("DOGGO GAME >:)")
 
