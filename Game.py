@@ -42,8 +42,14 @@ TRACK = pygame.image.load(os.path.join("Images/other", "track.png"))
 
 BACKGROUND = pygame.image.load(os.path.join("Images/other", "back.png"))
 
-MUSIC = pygame.mixer.music.load('Bad Bunny ft. Chencho Corleone - Me Porto bonito (saturado xddddlol).mp3')
-pygame.mixer.music.play(-1)
+SHORTFAR = pygame.mixer.Sound('shortfar.wav')
+
+CARTOON = pygame.mixer.Sound('cartoon.wav')
+
+MUSIC = pygame.mixer.music.load('mpb.mp3')
+#MUSIC = pygame.mixer.music.load('Hotel Room Winnie Poh.mp3')
+#MUSIC = pygame.mixer.music.load('ñañaña.mp3')
+#pygame.mixer.music.play()
 
 # Class to create the "doggo".
 class doggo:
@@ -248,6 +254,7 @@ def main():
             obstacle.update()
             if player.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
                 #pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
+                SHORTFAR.play()
                 pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
                 death_count += 1
                 menu(death_count) 
@@ -263,6 +270,7 @@ def menu(death_count):
     global points
     run = True
     while run:
+        pygame.mixer.music.play()
         SCREEN.fill((255, 228, 225))
         font = pygame.font.Font('Space-Explorer.ttf',30)
         
@@ -288,6 +296,7 @@ def menu(death_count):
                 run = False
             space = pygame.key.get_pressed() # get_pressed returns the state of all the keyboard keys as a bolean. 
             if space[pygame.K_SPACE] == True:
+                CARTOON.play()
                 main()
     pygame.quit()
     exit()
