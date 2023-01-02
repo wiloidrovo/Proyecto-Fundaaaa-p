@@ -275,6 +275,7 @@ def main():
                 track()
                 pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
                 pygame.display.update()
+                SHORTFAR.play()
                 pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
                 death_count += 1
                 menu(death_count)
@@ -322,6 +323,6 @@ def menu(death_count):
                 CARTOON.play()
                 main()
     pygame.quit()
-    #exit()
+    exit()
 
 menu(death_count=0)
