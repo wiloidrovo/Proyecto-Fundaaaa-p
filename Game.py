@@ -264,14 +264,14 @@ def menu(death_count):
         font = pygame.font.Font('Space-Explorer.ttf',30)
         
         if death_count == 0:
-            text = font.render("Press any Key to Start", True, (125, 31, 28))
+            text = font.render("PRESS SPACE TO START", True, (125, 31, 28))
             text_rect = text.get_rect()
             text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
             SCREEN.blit(text, text_rect)
             SCREEN.blit(START, (SCREEN_WIDTH // 2 - 33, SCREEN_HEIGHT // 2 - 140))
         else:
-            text = font.render("Press any Key to Restart", True, (125, 31, 28))
-            score = font.render("Your score: " + str(points), True, (125, 31, 28))
+            text = font.render("PRESS SPACE TO RESTART", True, (125, 31, 28))
+            score = font.render("YOUR SCORE: " + str(points), True, (125, 31, 28))
             score_rect = score.get_rect()
             score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 140)
             SCREEN.blit(score, score_rect)
@@ -283,7 +283,8 @@ def menu(death_count):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.KEYUP:
+            space = pygame.key.get_pressed() # get_pressed returns the state of all the keyboard keys as a bolean. 
+            if space[pygame.K_SPACE] == True:
                 main()
     pygame.quit()
     exit()
