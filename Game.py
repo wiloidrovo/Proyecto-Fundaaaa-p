@@ -34,8 +34,6 @@ OBSTACLES = [pygame.image.load(os.path.join("Images/obstacles", "1.png")),
 BAT = [pygame.image.load(os.path.join("Images/bat", "bat1.png")),
        pygame.image.load(os.path.join("Images/bat", "bat2.png"))]
 
-CLOUD = pygame.image.load(os.path.join("Images/other", "cloud.png"))
-
 GAMEOVER = pygame.image.load(os.path.join("Images/other", "game-over.png"))
 
 RESET = pygame.image.load(os.path.join("Images/other", "reset.png"))
@@ -62,7 +60,6 @@ class doggo:
         self.run_img = RUN
         self.jump_img = JUMP
         self.duck_img = DUCK
-        self.dead_img = DEAD
 
         self.doggo_run = True
         self.doggo_jump = False
@@ -140,31 +137,8 @@ class doggo:
         self.doggo_rectangle.y = self.Y_Position_duck    # We set the y position to Y_position_duck instead of Y_position.
         self.step_index += 1
 
-    def dead(self):
-        self.image = self.dead_img
-        self.doggo_rectangle.x = self.X_Position
-        self.doggo_rectangle.y = self.Y_Position
-
-
     def draw(self, SCREEN):   # This function blits the image onto the screen.
         SCREEN.blit(self.image, (self.doggo_rectangle.x, self.doggo_rectangle.y))
-
-# class cloud:
-#     def __init__(self):
-#         self.x = SCREEN_WIDTH + random.randint(1, 3)  # Specify the coord of the cloud when it is created.
-#         self.y = random.randint(40, 80)
-#         self.image = CLOUD
-#         self.width = self.image.get_width()
-
-#     def update(self):   # We make the cloud move from the right hand side of the screen to the left.
-#         self.x -= game_speed
-#         # Whenever the cloud moves out of the screen we reset the coord of the cloud so that it apears again
-#         if self.x < -self.width:
-#             self.x = SCREEN_WIDTH + random.randint(1, 3)
-#             self.y = random.randint(40, 80)
-
-#     def draw(self, SCREEN):
-#         SCREEN.blit(self.image, (self.x, self.y))   # We just blit the image onto our screen.
 
 class obstacle:   # Parent class for all the obstacles.
     def __init__(self, image, type):
@@ -206,7 +180,6 @@ def main():
     run = True   # Flag to our while loop.
     clock = pygame.time.Clock()   # Clock to time our game.
     player = doggo()   # Player is going to be an instance of the class "doggo".
-    #Cloud = cloud()
     game_speed = 14
     x_position_track = 0
     y_position_track = 444
@@ -271,17 +244,12 @@ def main():
             obstacle.draw(SCREEN)  # single obstacle on the obstacles' list.
             obstacle.update()
             if player.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
-                # pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
-                #SCREEN.blit(DEAD, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+                #pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
                 pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
-                SCREEN.blit(DEAD, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
                 death_count += 1
                 menu(death_count) 
 
         track()
-
-        #Cloud.draw(SCREEN)
-        #Cloud.update()
 
         score()
 
@@ -296,14 +264,14 @@ def menu(death_count):
         font = pygame.font.Font('Space-Explorer.ttf',30)
         
         if death_count == 0:
-            text = font.render("Press any Key to Start", True, (125, 31, 28))
+            text = font.render("PRESS SPACE TO START", True, (125, 31, 28))
             text_rect = text.get_rect()
             text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
             SCREEN.blit(text, text_rect)
             SCREEN.blit(START, (SCREEN_WIDTH // 2 - 33, SCREEN_HEIGHT // 2 - 140))
         else:
-            text = font.render("Press any Key to Restart", True, (125, 31, 28))
-            score = font.render("Your score: " + str(points), True, (125, 31, 28))
+            text = font.render("PRESS SPACE TO RESTART", True, (125, 31, 28))
+            score = font.render("YOUR SCORE: " + str(points), True, (125, 31, 28))
             score_rect = score.get_rect()
             score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 140)
             SCREEN.blit(score, score_rect)
@@ -315,7 +283,8 @@ def menu(death_count):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.KEYUP:
+            space = pygame.key.get_pressed() # get_pressed returns the state of all the keyboard keys as a bolean. 
+            if space[pygame.K_SPACE] == True:
                 main()
     pygame.quit()
     exit()
