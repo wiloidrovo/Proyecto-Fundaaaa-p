@@ -7,9 +7,11 @@ import random
 pygame.init()
 
 # Define global constants.
-SCREEN_HEIGHT = 660
-SCREEN_WIDTH = 1220
+SCREEN_HEIGHT = 690
+SCREEN_WIDTH = 1360
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+pygame.display.set_caption("DOGGO GAME >:)")
 
 # Load all the images of the game.
 START = pygame.image.load(os.path.join("Images/doggo", "start.png"))
@@ -79,7 +81,7 @@ class doggo:
         self.image = self.run_img[0]   # To initialize the first image, when our "doggo" is created
         self.doggo_rectangle = self.image.get_rect()   # To get the rectangle of the "doggo" image (hitbox).
 
-        # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 49-50. 
+        # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 59-60. 
         self.doggo_rectangle.x = self.X_Position
         self.doggo_rectangle.y = self.Y_Position
 
@@ -206,7 +208,7 @@ def main():
             game_speed += 1                              # (210, 105, 30)
         text = font.render("POINTS: " + str(points), True, (125, 31, 28)) # Display the text of our points on the screen.
         text_rectangle = text.get_rect()   # Get the coord of the rectangle within wich the points are displayed.
-        text_rectangle.center = (1050, 40) # Set the rectangle center to the top right corner of the screen.
+        text_rectangle.center = (1200, 40) # Set the rectangle center to the top right corner of the screen.
         SCREEN.blit(text, text_rectangle)  # Blit text_rectangle on the screen.
 
     def track():
@@ -231,8 +233,7 @@ def main():
 
 # Everything in pygame runs in a while loop.
     while run:
-        for event in pygame.event.get(): # To exit the game safety/ We will set the flag in false whenever
-                                         # we press the "X" in the corner of the window.
+        for event in pygame.event.get(): # To exit the game safety/ We set the flag in false whenever we press the "X".
             if event.type == pygame.QUIT:
                 run = False
         SCREEN.fill((255, 228, 225)) # Fill the screen with color white on every while loop iteration.
@@ -253,11 +254,13 @@ def main():
             obstacle.draw(SCREEN)  # single obstacle on the obstacles' list.
             obstacle.update()
             if player.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
-                #pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
+                pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
+                track()
+                pygame.display.update()
                 SHORTFAR.play()
                 pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
                 death_count += 1
-                menu(death_count) 
+                menu(death_count)
 
         track()
 
@@ -299,6 +302,6 @@ def menu(death_count):
                 CARTOON.play()
                 main()
     pygame.quit()
-    exit()
+    #exit()
 
 menu(death_count=0)
