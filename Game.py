@@ -42,6 +42,9 @@ TRACK = pygame.image.load(os.path.join("Images/other", "track.png"))
 
 BACKGROUND = pygame.image.load(os.path.join("Images/other", "back.png"))
 
+MUSIC = pygame.mixer.music.load('Bad Bunny ft. Chencho Corleone - Me Porto bonito (saturado xddddlol).mp3')
+pygame.mixer.music.play(-1)
+
 # Class to create the "doggo".
 class doggo:
     # X and Y position of our "doggo" on the screen.
@@ -211,7 +214,7 @@ def main():
         x_position_track -= game_speed # From the x position of our track we subtract the game_speed.
 
     def background():
-        global x_position_back, y_position_back     
+        global x_position_back, y_position_back  
         image_width = BACKGROUND.get_width()                
         SCREEN.blit(BACKGROUND, (x_position_back, y_position_back)) # Blit the image onto our screen.
         SCREEN.blit(BACKGROUND, (image_width + x_position_back, y_position_back)) # Behind the previous image we add this another one.
