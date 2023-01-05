@@ -18,3 +18,7 @@ fórmula de cálculo que se puede aplicar a los distintos objetos.
 -- El parámetro self se refiere al objeto instanciado de esa clase sobre 
 el cual se está invocando dicho método. Es decir, el objeto que usaste 
 para llamar al método.
+
+-- Un event en pygame es cualquier cosa que suceda por parte del usuario, 
+como mover el mouse o presionar una tecla. Para verificar los eventos 
+necesitamos hacer un bucle for.

@@ -7,11 +7,11 @@ import random
 pygame.init()
 
 # Define global constants.
-SCREEN_HEIGHT = 690
-SCREEN_WIDTH = 1360
-SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-#SCREEN = pygame.display.set_mode()
-#SCREEN_WIDTH, SCREEN_HEIGHT = SCREEN.get_size()
+#SCREEN_HEIGHT = 690
+#SCREEN_WIDTH = 1360
+#SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+SCREEN = pygame.display.set_mode()
+SCREEN_WIDTH, SCREEN_HEIGHT = SCREEN.get_size()
 
 pygame.display.set_caption("DOGGO GAME >:)")
 
@@ -50,10 +50,10 @@ SHORTFAR = pygame.mixer.Sound('shortfar.wav')
 
 CARTOON = pygame.mixer.Sound('cartoon.wav')
 
-#MUSIC = pygame.mixer.music.load('mpb.mp3')
-MUSIC = pygame.mixer.music.load('Hotel Room Winnie Poh.mp3')
-#MUSIC = pygame.mixer.music.load('ñañaña.mp3')
-#pygame.mixer.music.play()
+MUSIC = pygame.mixer.music.load('mpb.mp3')
+#MUSIC = pygame.mixer.music.load('LaLla.mp3')
+#MUSIC = pygame.mixer.music.load('HRW.mp3')
+#MUSIC = pygame.mixer.music.load('Ña.mp3')
 
 # Class to create the "doggo".
 class doggo:
@@ -126,7 +126,7 @@ class doggo:
             self.doggo_jump = False
             self.doggo_duck = False
             self.doggo_dead = False
-        elif death and not self.doggo_jump:
+        elif death:
             self.doggo_run = False
             self.doggo_jump = False 
             self.doggo_duck = False
@@ -260,6 +260,8 @@ def main():
                 run = False
         SCREEN.fill((255, 228, 225)) # Fill the screen with color white on every while loop iteration.
         background()
+        track()
+        score()
         UserInput = pygame.key.get_pressed()
 
         if len(obstacles) == 0:   # If the lenght of the obstacles' list is equal to 0,
@@ -274,7 +276,6 @@ def main():
             if player.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
                 player.update(UserInput, True)
                 player.draw(SCREEN)
-                track()
                 pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
                 pygame.display.update()
                 SHORTFAR.play()
@@ -285,9 +286,6 @@ def main():
         # Two functions on the player object.
         player.draw(SCREEN) # This function will draw our "doggo" onto the screen.
         player.update(UserInput) # This function will update the "doggo" on every while loop iteration.
-        track()
-
-        score()
 
         clock.tick(30)   # Set the timing of the game.
         pygame.display.update()   # Update the display.
@@ -299,6 +297,11 @@ def menu(death_count):
         pygame.mixer.music.play()
         SCREEN.fill((255, 228, 225))
         font = pygame.font.Font('Space-Explorer.ttf',30)
+        font_exit = pygame.font.Font('Space-Explorer.ttf',20)
+        text_exit = font_exit.render("PRESS ESCAPE TO EXIT", True, (164, 50, 50))
+        text_rect = text_exit.get_rect()
+        text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 300)
+        SCREEN.blit(text_exit, text_rect)
         
         if death_count == 0:
             text = font.render("PRESS SPACE TO START", True, (125, 31, 28))
@@ -318,10 +321,10 @@ def menu(death_count):
             SCREEN.blit(GAMEOVER, (SCREEN_WIDTH // 2 - 200, SCREEN_HEIGHT // 2 - 335))
         pygame.display.update()
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            space = pygame.key.get_pressed() # get_pressed returns the state of all the keyboard keys as a bolean.
+            if event.type == pygame.QUIT or space[pygame.K_ESCAPE]:
                 run = False
-            space = pygame.key.get_pressed() # get_pressed returns the state of all the keyboard keys as a bolean. 
-            if space[pygame.K_SPACE] == True:
+            elif space[pygame.K_SPACE] == True:
                 CARTOON.play()
                 main()
     pygame.quit()
