@@ -13,7 +13,7 @@ pygame.init()
 SCREEN = pygame.display.set_mode()
 SCREEN_WIDTH, SCREEN_HEIGHT = SCREEN.get_size()
 
-pygame.display.set_caption("DOGGO GAME >:)")
+pygame.display.set_caption("DOGGO GAME >:D")
 
 # Load all the images of the game.
 START = pygame.image.load(os.path.join("Images/doggo", "start.png"))
@@ -85,7 +85,7 @@ class doggo:
         self.image = self.run_img[0]   # To initialize the first image, when our "doggo" is created
         self.doggo_rectangle = self.image.get_rect()   # To get the rectangle of the "doggo" image (hitbox).
 
-        # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 59-60. 
+        # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 61-62. 
         self.doggo_rectangle.x = self.X_Position
         self.doggo_rectangle.y = self.Y_Position
 
@@ -133,17 +133,17 @@ class doggo:
             self.doggo_dead = True
 
     def run(self):   # Run function.
-        self.image = self.run_img[self.step_index // 5]  # This variable called image is set to the corresponding image of the "doggo" running.
-                                                         # The variable step_index helps us rotate through the individual images of the "doggo"
-                                                         # running in order to make it look like it's being animated.
-        self.doggo_rectangle = self.image.get_rect()     # To get the rectangle coord of the "doggo" image.
+        self.image = self.run_img[self.step_index // 5] # This variable called image is set to the corresponding image of the "doggo" running.
+                                                        # The variable step_index helps us rotate through the individual images of the "doggo"
+                                                        # running in order to make it look like it's being animated.
+        self.doggo_rectangle = self.image.get_rect()    # To get the rectangle coord of the "doggo" image.
         
-        self.doggo_rectangle.x = self.X_Position         # To set the rectangle coord to the position on the
-        self.doggo_rectangle.y = self.Y_Position         # screen where we want the "doggo" to be displayed.
-        self.step_index += 1                             # Increment the step_index by 1.
-                                                         # When the step_index is between the values 0 and 5 the first image of our "doggo" is displayed
-                                                         # and when the step_index is between the values 5 and 10 the second image of our "doggo" is displayed.
-                                                         # and beyond the value of 10 the step_index is reset.
+        self.doggo_rectangle.x = self.X_Position        # To set the rectangle coord to the position on the
+        self.doggo_rectangle.y = self.Y_Position        # screen where we want the "doggo" to be displayed.
+        self.step_index += 1                            # Increment the step_index by 1.
+                                                        # When the step_index is between the values 0 and 5 the first image of our "doggo" is displayed
+                                                        # and when the step_index is between the values 5 and 10 the second image of our "doggo" is displayed.
+                                                        # and beyond the value of 10 the step_index is reset.
 
     def jump(self):
         self.image = self.jump_img
@@ -212,7 +212,7 @@ def main():
     global game_speed, x_position_track, y_position_track, points, obstacles, x_position_back, y_position_back # The variable game_speed is to keep track how fast everything on our screen is moving.
     run = True   # Flag to our while loop.
     clock = pygame.time.Clock()   # Clock to time our game.
-    player = doggo()   # Player is going to be an instance of the class "doggo".
+    player = doggo()   # Player is going to be an instance/object of the class "doggo".
     game_speed = 14
     x_position_track = 0
     y_position_track = 444
