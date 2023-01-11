@@ -46,8 +46,8 @@ TRACK = pygame.image.load(os.path.join("Images/other", "track.png"))
 
 BACKGROUND = pygame.image.load(os.path.join("Images/other", "back.png"))
 
-#Mixer Sounds
-pygame.mixer.init()
+#pygame.mixer.init() # To initialize mixer module of pygame.
+
 SHORTFAR = pygame.mixer.Sound('shortfar.wav') # Create a new Sound object from a file or buffer object.
 
 CARTOON = pygame.mixer.Sound('cartoon.wav')
