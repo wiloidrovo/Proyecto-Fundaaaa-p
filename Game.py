@@ -10,7 +10,7 @@ pygame.init()
 #SCREEN_HEIGHT = 690
 #SCREEN_WIDTH = 1360
 #SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-SCREEN = pygame.display.set_mode()
+SCREEN = pygame.display.set_mode()  # Initialize a window or screen for display.
 SCREEN_WIDTH, SCREEN_HEIGHT = SCREEN.get_size()
 
 pygame.display.set_caption("DOGGO GAME >:D")
@@ -46,11 +46,11 @@ TRACK = pygame.image.load(os.path.join("Images/other", "track.png"))
 
 BACKGROUND = pygame.image.load(os.path.join("Images/other", "back.png"))
 
-SHORTFAR = pygame.mixer.Sound('shortfar.wav')
+SHORTFAR = pygame.mixer.Sound('shortfar.wav') # Create a new Sound object from a file or buffer object.
 
 CARTOON = pygame.mixer.Sound('cartoon.wav')
 
-MUSIC = pygame.mixer.music.load('mpb.mp3')
+MUSIC = pygame.mixer.music.load('mpb.mp3')    # Load a music file for playback.
 #MUSIC = pygame.mixer.music.load('LaLla.mp3')
 #MUSIC = pygame.mixer.music.load('HRW.mp3')
 #MUSIC = pygame.mixer.music.load('Ña.mp3')
@@ -277,7 +277,7 @@ def main():
                 player.update(UserInput, True)
                 player.draw(SCREEN)
                 pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
-                pygame.display.update()
+                pygame.display.update() # Update portions of the screen for software displays.
                 SHORTFAR.play()
                 pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
                 death_count += 1
@@ -288,7 +288,7 @@ def main():
         player.update(UserInput) # This function will update the "doggo" on every while loop iteration.
 
         clock.tick(30)   # Set the timing of the game.
-        pygame.display.update()   # Update the display.
+        pygame.display.update()   # Update portions of the screen for software displays.
 
 def menu(death_count):
     global points
@@ -319,7 +319,7 @@ def menu(death_count):
             text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 180)
             SCREEN.blit(text, text_rect)
             SCREEN.blit(GAMEOVER, (SCREEN_WIDTH // 2 - 200, SCREEN_HEIGHT // 2 - 335))
-        pygame.display.update()
+        pygame.display.update() # Update portions of the screen for software displays.
         for event in pygame.event.get():
             space = pygame.key.get_pressed() # get_pressed returns the state of all the keyboard keys as a bolean.
             if event.type == pygame.QUIT or space[pygame.K_ESCAPE]:
