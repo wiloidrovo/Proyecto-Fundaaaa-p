@@ -6,9 +6,7 @@ Its very easy to use and there exists full information about this.
 ¿Qué es def __ init __(self)?
 -- El método __init__ es el primer método que se ejecuta cuando se crea 
 un objeto. El método __init__ se llama automáticamente. Es decir es 
-imposible de olvidarse de llamarlo ya que se llamará automáticamente. 
-Quien utiliza POO en Python (Programación Orientada a Objetos) conoce 
-el objetivo de este método.
+imposible de olvidarse de llamarlo ya que se llamará automáticamente.
 
 
 -- La función Self ofrece un modo de cálculo para hacer referencia al 

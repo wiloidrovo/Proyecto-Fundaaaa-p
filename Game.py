@@ -10,6 +10,7 @@ pygame.init()
 #SCREEN_HEIGHT = 690
 #SCREEN_WIDTH = 1360
 #SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+# Create the screen object.
 SCREEN = pygame.display.set_mode()  # Initialize a window or screen for display.
 SCREEN_WIDTH, SCREEN_HEIGHT = SCREEN.get_size()
 
@@ -82,10 +83,10 @@ class doggo:
         self.doggo_duck = False
         self.doggo_dead = False
 
-        self.step_index = 0   # To animate the "doggo".
+        self.step_index = 0  # To animate the "doggo".
         self.jump_vel = self.JUMP_Velocity  # We initialize the jumping velocity of the "doggo" to the JUMP_Velocity that we just defined before.
-        self.image = self.run_img[0]   # To initialize the first image, when our "doggo" is created
-        self.doggo_rectangle = self.image.get_rect()   # To get the rectangle of the "doggo" image (hitbox).
+        self.image = self.run_img[0]  # To initialize the first image, when our "doggo" is created
+        self.doggo_rectangle = self.image.get_rect()  # To get the rectangle of the "doggo" image (hitbox).
 
         # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 61-62. 
         self.doggo_rectangle.x = self.X_Position
@@ -213,7 +214,7 @@ class bat(obstacle):
 def main():
     global game_speed, x_position_track, y_position_track, points, obstacles, x_position_back, y_position_back # The variable game_speed is to keep track how fast everything on our screen is moving.
     run = True   # Flag to our while loop.
-    clock = pygame.time.Clock()   # Clock to time our game.
+    clock = pygame.time.Clock()   # Setup the clock for a decent framerate
     player = doggo()   # Player is going to be an instance/object of the class "doggo".
     game_speed = 14
     x_position_track = 0
@@ -250,7 +251,7 @@ def main():
         image_width = BACKGROUND.get_width()                
         SCREEN.blit(BACKGROUND, (x_position_back, y_position_back)) # Blit the image onto our screen.
         SCREEN.blit(BACKGROUND, (image_width + x_position_back, y_position_back)) # Behind the previous image we add this another one.
-        if x_position_back <= -image_width: # Whenever one track image moves off the screen, another one is created right after.
+        if x_position_back <= -image_width: # Whenever one back image moves off the screen, another one is created right after.
             SCREEN.blit(BACKGROUND, (image_width + x_position_back, y_position_back))
             x_position_back = 0
         x_position_back -= game_speed # From the x position of our track we subtract the game_speed.
@@ -260,11 +261,12 @@ def main():
         for event in pygame.event.get(): # To exit the game safety/ We set the flag in false whenever we press the "X".
             if event.type == pygame.QUIT:
                 run = False
-        SCREEN.fill((255, 228, 225)) # Fill the screen with color white on every while loop iteration.
+        SCREEN.fill((255, 228, 225)) # Fill the screen with color "pink" on every while loop iteration.
         background()
         track()
         score()
         UserInput = pygame.key.get_pressed()
+        pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2)
 
         if len(obstacles) == 0:   # If the lenght of the obstacles' list is equal to 0,
             if random.randint(0, 1) == 0: # then we want to randomly create either the
@@ -274,11 +276,12 @@ def main():
 
         for obstacle in obstacles: # We call the draw and update function on every
             obstacle.draw(SCREEN)  # single obstacle on the obstacles' list.
+            pygame.draw.rect(SCREEN, (255, 0, 0), obstacle.rect, 2)
             obstacle.update()
             if player.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
                 player.update(UserInput, True)
                 player.draw(SCREEN)
-                pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
+                #pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
                 pygame.display.update() # Update portions of the screen for software displays.
                 SHORTFAR.play()
                 pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
@@ -296,7 +299,7 @@ def menu(death_count):
     global points
     run = True
     while run:
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(-1)
         SCREEN.fill((255, 228, 225))
         font = pygame.font.Font('Space-Explorer.ttf',30)
         font_exit = pygame.font.Font('Space-Explorer.ttf',20)
