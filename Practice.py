@@ -7,7 +7,8 @@
 import pygame
 import os # Lead us interact and obtain information from the operative system (OS).
 import random
-import sys
+import math
+import neat
 
 # Initialize pygame.
 pygame.init()
@@ -218,13 +219,15 @@ class bat(obstacle):
         self.index += 1     # reset the index back to zero. It makes the bat look animated.
 
 def remove(index):
-    player.pop(index)
+    dogs.pop(index)
 
 def main():
-    global game_speed, x_position_track, y_position_track, points, obstacles, x_position_back, y_position_back, player # The variable game_speed is to keep track how fast everything on our screen is moving.
+    global game_speed, x_position_track, y_position_track, points, obstacles, x_position_back, y_position_back, dogs, ge, nets # The variable game_speed is to keep track how fast everything on our screen is moving.
     run = True   # Flag to our while loop.
     clock = pygame.time.Clock()   # Setup the clock for a decent framerate
-    player = [doggo()]   # Player is going to be an instance/object of the class "doggo".
+    dogs = [doggo()]   # dogs is going to be an instance/object of the class "doggo".
+    ge = []
+    nets = []
     game_speed = 14
     x_position_track = 0
     y_position_track = 444
@@ -234,6 +237,13 @@ def main():
     font = pygame.font.Font('Space-Explorer.ttf',35) # Font used to display the score.
     obstacles = []
     death_count = 0
+
+    #for genome_id, genome in genomes:
+    #    dogs.append(doggo())
+    #    ge.append(genome)
+    #    net = neat.nn.FeedForwardNetwork.create(genome, config)
+    #    nets.append(net)
+    #    genome.fitness = 0
 
     def score():
         global game_speed, points
@@ -275,8 +285,9 @@ def main():
         track()
         score()
         UserInput = pygame.key.get_pressed()
-        #pygame.draw.rect(SCREEN, (255, 0, 0), player[0].doggo_rectangle, 2)
-
+        #pygame.draw.rect(SCREEN, (255, 0, 0), dogs[0].doggo_rectangle, 2)
+        if len(dogs) == 0:
+            break
         if len(obstacles) == 0:   # If the lenght of the obstacles' list is equal to 0,
             if random.randint(0, 1) == 0: # then we want to randomly create either the
                 obstacles.append(obst(OBSTACLES)) # obst or the bat by appending one of
@@ -285,25 +296,56 @@ def main():
 
         for obstacle in obstacles: # We call the draw and update function on every
             obstacle.draw(SCREEN)  # single obstacle on the obstacles' list.
-            pygame.draw.rect(SCREEN, (255, 0, 0), obstacle.rect, 2)
+            #pygame.draw.rect(SCREEN, (255, 0, 0), obstacle.rect, 2)
             obstacle.update()
-            if player[0].doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
-                player[0].update(UserInput, True)
-                player[0].draw(SCREEN)
-                #pygame.draw.rect(SCREEN, (255, 0, 0), player[0].doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
-                pygame.display.update() # Update portions of the screen for software displays.
-                SHORTFAR.play()
-                pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
-                death_count += 1
-                menu(death_count)
+            for i, dog in enumerate(dogs):
+                if dog.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
+                    #ge[i].fitness -= 1
+                    remove(i)
+                    dog.update(UserInput, True)
+                    dog.draw(SCREEN)
+                    #pygame.draw.rect(SCREEN, (255, 0, 0), dog.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
+                    pygame.display.update() # Update portions of the screen for software displays.
+                    SHORTFAR.play()
+                    pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
+                    death_count += 1
+                    menu(death_count)
 
-        # Two functions on the player object.
-        for dog in player:
-            player.draw(SCREEN) # This function will draw our "doggo" onto the screen.
-            player.update(UserInput) # This function will update the "doggo" on every while loop iteration.
+        #for i, dog in enumerate(dogs):
+        #    output = nets[i].activate((dog.rect.y,
+        #                               distance((dog.rect.x, dog.rect.y),
+        #                                obstacle.rect.midtop)))
+        #    if output[0] > 0.5 and dog.rect.y == dog.Y_POS:
+        #        dog.dino_jump = True
+        #        dog.dino_run = False
+        for i, dog in enumerate(dogs):
+            dog.update(UserInput)
+        # Two functions on the dogs object.
+        for dog in dogs:
+            dog.draw(SCREEN) # This function will draw our "doggo" onto the screen.
+            #dog.update(UserInput) # This function will update the "doggo" on every while loop iteration.
 
         clock.tick(30)   # Set the timing of the game.
         pygame.display.update()   # Update portions of the screen for software displays.
+
+# Setup the NEAT
+def runn(config_path):
+    config = neat.config.Config(
+        neat.DefaultGenome,
+        neat.DefaultReproduction,
+        neat.DefaultSpeciesSet,
+        neat.DefaultStagnation,
+        config_path
+    )
+
+    pop = neat.Population(config)
+    pop.runn(eval_genomes, 50)
+
+if __name__ == '__main__':
+    local_dir = os.path.dirname(__file__)
+    config_path = os.path.join(local_dir, 'config.txt')
+    runn(config_path)
+
 
 def menu(death_count):
     global points
