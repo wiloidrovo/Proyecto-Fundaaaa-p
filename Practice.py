@@ -220,12 +220,19 @@ class bat(obstacle):
 
 def remove(index):
     dogs.pop(index)
+    ge.pop(index)
+    nets.pop(index)
 
-def main():
+def distance(pos_a, pos_b):
+    dx = pos_a[0]-pos_b[0]
+    dy = pos_a[1]-pos_b[1]
+    return math.sqrt(dx**2+dy**2)
+
+def eval_genomes(genomes, config):
     global game_speed, x_position_track, y_position_track, points, obstacles, x_position_back, y_position_back, dogs, ge, nets # The variable game_speed is to keep track how fast everything on our screen is moving.
     run = True   # Flag to our while loop.
     clock = pygame.time.Clock()   # Setup the clock for a decent framerate
-    dogs = [doggo()]   # dogs is going to be an instance/object of the class "doggo".
+    dogs = []   # dogs is going to be an instance/object of the class "doggo".
     ge = []
     nets = []
     game_speed = 14
@@ -236,14 +243,14 @@ def main():
     points = 0
     font = pygame.font.Font('Space-Explorer.ttf',35) # Font used to display the score.
     obstacles = []
-    death_count = 0
+    #death_count = 0
 
-    #for genome_id, genome in genomes:
-    #    dogs.append(doggo())
-    #    ge.append(genome)
-    #    net = neat.nn.FeedForwardNetwork.create(genome, config)
-    #    nets.append(net)
-    #    genome.fitness = 0
+    for genome_id, genome in genomes:
+        dogs.append(doggo())
+        ge.append(genome)
+        net = neat.nn.FeedForwardNetwork.create(genome, config)
+        nets.append(net)
+        genome.fitness = 0
 
     def score():
         global game_speed, points
@@ -284,7 +291,7 @@ def main():
         background()
         track()
         score()
-        UserInput = pygame.key.get_pressed()
+        #UserInput = pygame.key.get_pressed()
         #pygame.draw.rect(SCREEN, (255, 0, 0), dogs[0].doggo_rectangle, 2)
         if len(dogs) == 0:
             break
@@ -300,26 +307,27 @@ def main():
             obstacle.update()
             for i, dog in enumerate(dogs):
                 if dog.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
-                    #ge[i].fitness -= 1
+                    ge[i].fitness -= 1
                     remove(i)
-                    dog.update(UserInput, True)
-                    dog.draw(SCREEN)
+                    #dog.update(UserInput, True)
+                    #dog.draw(SCREEN)
                     #pygame.draw.rect(SCREEN, (255, 0, 0), dog.doggo_rectangle, 2) # image, we want the hitbox of the doggo to turn red.
-                    pygame.display.update() # Update portions of the screen for software displays.
-                    SHORTFAR.play()
-                    pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
-                    death_count += 1
-                    menu(death_count)
+                    #pygame.display.update() # Update portions of the screen for software displays.
+                    #SHORTFAR.play()
+                    #pygame.time.delay(1000) # When we run into an obstacle I first want a small time delay before going to the main menu.
+                    #death_count += 1
+                    #menu(death_count)
 
-        #for i, dog in enumerate(dogs):
-        #    output = nets[i].activate((dog.rect.y,
-        #                               distance((dog.rect.x, dog.rect.y),
-        #                                obstacle.rect.midtop)))
-        #    if output[0] > 0.5 and dog.rect.y == dog.Y_POS:
-        #        dog.dino_jump = True
-        #        dog.dino_run = False
         for i, dog in enumerate(dogs):
-            dog.update(UserInput)
+            output = nets[i].activate((dog.doggo_rectangle.y,
+                                       distance((dog.doggo_rectangle.x, dog.doggo_rectangle.y),
+                                       obstacle.rect.midtop)))
+            if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_Position:
+                dog.doggo_run = False
+                dog.doggo_jump = True
+                dog.doggo_duck = False
+                dog.doggo_dead = False
+            #dog.update(UserInput)
         # Two functions on the dogs object.
         for dog in dogs:
             dog.draw(SCREEN) # This function will draw our "doggo" onto the screen.
@@ -329,7 +337,7 @@ def main():
         pygame.display.update()   # Update portions of the screen for software displays.
 
 # Setup the NEAT
-def runn(config_path):
+def run(config_path):
     config = neat.config.Config(
         neat.DefaultGenome,
         neat.DefaultReproduction,
@@ -339,52 +347,52 @@ def runn(config_path):
     )
 
     pop = neat.Population(config)
-    pop.runn(eval_genomes, 50)
+    pop.run(eval_genomes, 50)
 
 if __name__ == '__main__':
     local_dir = os.path.dirname(__file__)
     config_path = os.path.join(local_dir, 'config.txt')
-    runn(config_path)
+    run(config_path)
 
 
-def menu(death_count):
-    global points
-    run = True
-    while run:
-        pygame.mixer.music.play(-1)
-        SCREEN.fill((255, 228, 225))
-        font = pygame.font.Font('Space-Explorer.ttf',30)
-        font_exit = pygame.font.Font('Space-Explorer.ttf',20)
-        text_exit = font_exit.render("PRESS ESCAPE TO EXIT", True, (164, 50, 50))
-        text_rect = text_exit.get_rect()
-        text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 300)
-        SCREEN.blit(text_exit, text_rect)
+#def menu(death_count):
+#    global points
+#    run = True
+#    while run:
+#        pygame.mixer.music.play(-1)
+#        SCREEN.fill((255, 228, 225))
+#        font = pygame.font.Font('Space-Explorer.ttf',30)
+#        font_exit = pygame.font.Font('Space-Explorer.ttf',20)
+#        text_exit = font_exit.render("PRESS ESCAPE TO EXIT", True, (164, 50, 50))
+#        text_rect = text_exit.get_rect()
+#        text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 300)
+#        SCREEN.blit(text_exit, text_rect)
         
-        if death_count == 0:
-            text = font.render("PRESS SPACE TO START", True, (125, 31, 28))
-            text_rect = text.get_rect()
-            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-            SCREEN.blit(text, text_rect)
-            SCREEN.blit(START, (SCREEN_WIDTH // 2 - 33, SCREEN_HEIGHT // 2 - 140))
-        else:
-            text = font.render("PRESS SPACE TO RESTART", True, (125, 31, 28))
-            score = font.render("YOUR SCORE: " + str(points), True, (125, 31, 28))
-            score_rect = score.get_rect()
-            score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 140)
-            SCREEN.blit(score, score_rect)
-            text_rect = text.get_rect()
-            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 180)
-            SCREEN.blit(text, text_rect)
-            SCREEN.blit(GAMEOVER, (SCREEN_WIDTH // 2 - 200, SCREEN_HEIGHT // 2 - 335))
-        pygame.display.update() # Update portions of the screen for software displays.
-        for event in pygame.event.get():
-            space = pygame.key.get_pressed() # get_pressed returns the state of all the keyboard keys as a bolean.
-            if event.type == pygame.QUIT or space[pygame.K_ESCAPE]:
-                run = False
-            elif space[pygame.K_SPACE] == True:
-                CARTOON.play()
-                main()
-    pygame.quit()
-    exit()
+#        if death_count == 0:
+#            text = font.render("PRESS SPACE TO START", True, (125, 31, 28))
+#            text_rect = text.get_rect()
+#            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+#            SCREEN.blit(text, text_rect)
+#            SCREEN.blit(START, (SCREEN_WIDTH // 2 - 33, SCREEN_HEIGHT // 2 - 140))
+#        else:
+#            text = font.render("PRESS SPACE TO RESTART", True, (125, 31, 28))
+#            score = font.render("YOUR SCORE: " + str(points), True, (125, 31, 28))
+#            score_rect = score.get_rect()
+#            score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 140)
+#            SCREEN.blit(score, score_rect)
+#            text_rect = text.get_rect()
+#            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 180)
+#            SCREEN.blit(text, text_rect)
+#            SCREEN.blit(GAMEOVER, (SCREEN_WIDTH // 2 - 200, SCREEN_HEIGHT // 2 - 335))
+#        pygame.display.update() # Update portions of the screen for software displays.
+#        for event in pygame.event.get():
+#            space = pygame.key.get_pressed() # get_pressed returns the state of all the keyboard keys as a bolean.
+#            if event.type == pygame.QUIT or space[pygame.K_ESCAPE]:
+#                run = False
+#            elif space[pygame.K_SPACE] == True:
+#                CARTOON.play()
+#                #main()
+#    pygame.quit()
+#    exit()
 
-menu(death_count=0)
+#menu(death_count=0)
