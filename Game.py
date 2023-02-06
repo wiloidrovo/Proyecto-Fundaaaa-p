@@ -56,7 +56,7 @@ CARTOON = pygame.mixer.Sound('cartoon.wav')
 MUSIC = pygame.mixer.music.load('mpb.mp3')    # Load a music file for playback.
 #MUSIC = pygame.mixer.music.load('LaLla.mp3')
 #MUSIC = pygame.mixer.music.load('HRW.mp3')
-#MUSIC = pygame.mixer.music.load('Ña.mp3')
+#MUSIC = pygame.mixer.music.load('Nia.mp3')
 
 # Class to create the "doggo".
 class doggo:
@@ -179,7 +179,7 @@ class doggo:
 class obstacle:   # Parent class for all the obstacles.
     def __init__(self, image, type):
         self.image = image
-        self.type = type  # Type is going to be an integer value between 0 and 2 and it's going to determine
+        self.type = type  # Type is going to be an integer value between 0 and 1 and it's going to determine
                           # what type of obstacle image is going to be displayed on our screen.
         self.rect = self.image[self.type].get_rect()  # To get the rectangle coord of the image which we're displaying.
         self.rect.x = SCREEN_WIDTH  # To set the x coord of the obstacle to the screen width. / Whenever an obstacle is
