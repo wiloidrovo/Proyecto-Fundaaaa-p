@@ -184,6 +184,7 @@ class doggo:
 
     def draw(self, SCREEN):   # This function blits the image onto the screen.
         SCREEN.blit(self.image, (self.doggo_rectangle.x, self.doggo_rectangle.y))
+        pygame.draw.rect(SCREEN, self.color,(self.doggo_rectangle), 2)
         for obstacle in obstacles:
             pygame.draw.line(SCREEN, self.color, (self.doggo_rectangle.x + 90, self.doggo_rectangle.y + 55), obstacle.rect.center, 2)
 
@@ -304,7 +305,8 @@ def eval_genomes(genomes, config):
         track()
         score()
         #UserInput = pygame.key.get_pressed()
-        #pygame.draw.rect(SCREEN, (255, 0, 0), dogs[0].doggo_rectangle, 2)
+        #for dog in dogs:
+        #    pygame.draw.rect(SCREEN, (255, 0, 0), dog.doggo_rectangle, 2)
         if len(dogs) == 0:
             break
         if len(obstacles) == 0:   # If the lenght of the obstacles' list is equal to 0,
@@ -336,16 +338,17 @@ def eval_genomes(genomes, config):
                                             #obstacle.obst.rect.midtop)))
                                             obstacle.rect.midtop)))
                 #if distance((dog.doggo_rectangle.x, dog.doggo_rectangle.y), obstacle.rect.midtop) > 30:
-                #for obstacle in obstacles: #350
-                #if obstacle.rect.y > 350:
-                if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION:
-                    dog.doggo_run = False
-                    dog.doggo_jump = True
-                    dog.doggo_duck = False
-            #elif output[0] < 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION_DUCK:
-            #    dog.doggo_run = False
-            #    dog.doggo_jump = False
-            #    dog.doggo_duck = True
+                for obstacle in obstacles: #350 287
+                    if obstacle.rect.y > 287:
+                        if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION:
+                            dog.doggo_run = False
+                            dog.doggo_jump = True
+                            dog.doggo_duck = False
+                #elif output[0] < 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION_DUCK:
+                    else:
+                        dog.doggo_run = False
+                        dog.doggo_jump = False
+                        dog.doggo_duck = True
                 #dog.doggo_dead = False
             #dog.update(UserInput)
         # Two functions on the dogs object.
