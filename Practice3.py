@@ -164,9 +164,10 @@ class doggo:
             # Remember, when "doggo" leaves the floor for the jump, its velocity is 9.5 pixel/while loop iteration. At the top of the jump its
             # velocity is 0 and then when "doggo" moves down again and reaches the same position at the beggining, its velocity will be 9.5 again,
             # but now the velocity vector points down, so now it is -9.5.
-        if self.jump_vel < -self.JUMP_VELOCITY:  # As soon as the velocity of "doggo" reaches the value of -9.5 we set "doggo" jump to false.
+        if self.jump_vel <= -self.JUMP_VELOCITY:  # As soon as the velocity of "doggo" reaches the value of -9.5 we set "doggo" jump to false.
             self.doggo_jump = False
             self.doggo_run = True
+            self.doggo_duck = False
             self.jump_vel = self.JUMP_VELOCITY    # Reset the jump velocity of "doggo".
 
     def duck(self):   # Duck function. It is identical to the run function, but the only difference is the following:
@@ -233,7 +234,7 @@ def distance(pos_a, pos_b):
     dy = pos_a[1]-pos_b[1]
     return math.sqrt(dx**2+dy**2)
 
-def eval_genomes(genomes, config, tries = 0):
+def eval_genomes(genomes, config):
     global game_speed, x_position_track, y_position_track, points, obstacles, x_position_back, y_position_back, dogs, ge, nets # The variable game_speed is to keep track how fast everything on our screen is moving.
     run = True   # Flag to our while loop.
     clock = pygame.time.Clock()   # Setup the clock for a decent framerate
@@ -299,7 +300,6 @@ def eval_genomes(genomes, config, tries = 0):
                 run = False
                 pygame.quit()
                 exit()
-                #break
         SCREEN.fill((255, 228, 225)) # Fill the screen with color "pink" on every while loop iteration.
         background()
         track()
@@ -322,7 +322,6 @@ def eval_genomes(genomes, config, tries = 0):
             for i, dog in enumerate(dogs):
                 if dog.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
                     ge[i].fitness -= 1
-                    tries += 1
                     remove(i)
                     #dog.update(UserInput, True)
                     #dog.draw(SCREEN)
@@ -334,20 +333,20 @@ def eval_genomes(genomes, config, tries = 0):
                     #menu(death_count)
 
             for i, dog in enumerate(dogs):
-                output = nets[i].activate((dog.doggo_rectangle.y, dog.doggo_rectangle.x,
+                output = nets[i].activate((dog.doggo_rectangle.y,
                                         distance((dog.doggo_rectangle.x, dog.doggo_rectangle.y),
-                                            obstacle.rect.midtop)))
+                                         obstacle.rect.midtop)))
                 #if distance((dog.doggo_rectangle.x, dog.doggo_rectangle.y), obstacle.rect.midtop) > 30:
-                for obstacle in obstacles: #350 287
+                #for obstacle in obstacles: #350 287
                     #if obstacle.rect.y == 350:
-                    if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION:
-                        dog.doggo_run = False
-                        dog.doggo_jump = True
-                        dog.doggo_duck = False
-                    elif output[0] > 0.5 and dog.doggo_rectangle.x == dog.X_POSITION:
-                        dog.doggo_run = False
-                        dog.doggo_jump = False
-                        dog.doggo_duck = True
+                if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION:
+                    dog.doggo_run = False
+                    dog.doggo_jump = True
+                    dog.doggo_duck = False
+                    #elif output[0] > 0.5 and dog.doggo_rectangle.x == dog.X_POSITION:
+                    #    dog.doggo_run = False
+                    #    dog.doggo_jump = False
+                    #    dog.doggo_duck = True
                     #if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION_DUCK and obstacle.rect.y == 287:
                     #if obstacle.rect.y == 287:
                     #else:
@@ -366,7 +365,8 @@ def eval_genomes(genomes, config, tries = 0):
         pygame.display.update()   # Update portions of the screen for software displays.
 
 # Setup the NEAT
-def run(config_path):
+def run_neat(config_path):
+    global pop
     config = neat.config.Config(
         neat.DefaultGenome,
         neat.DefaultReproduction,
@@ -381,7 +381,7 @@ def run(config_path):
 if __name__ == '__main__':
     local_dir = os.path.dirname(__file__)
     config_path = os.path.join(local_dir, 'config.txt')
-    run(config_path)
+    run_neat(config_path)
 
 
 #def menu(death_count):
