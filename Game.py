@@ -61,14 +61,14 @@ MUSIC = pygame.mixer.music.load('mpb.mp3')    # Load a music file for playback.
 # Class to create the "doggo".
 class doggo:
     # X and Y position of our "doggo" on the screen.
-    X_Position = 150
-    Y_Position = 350
+    X_POSITION = 150
+    Y_POSITION = 350
 
     # The image of the "doggo" ducking is smaller than the "doggo" running.
-    Y_Position_duck = 387
+    Y_POSITION_DUCK = 387
 
     # This variable defines the velocity in which "doggo" will jump
-    JUMP_Velocity = 9.5
+    JUMP_VELOCITY = 9.5
 
 # This method will initialize the "doggo" whenever an object of this class is created.
     def __init__(self):
@@ -84,13 +84,13 @@ class doggo:
         self.doggo_dead = False
 
         self.step_index = 0  # To animate the "doggo".
-        self.jump_vel = self.JUMP_Velocity  # We initialize the jumping velocity of the "doggo" to the JUMP_Velocity that we just defined before.
+        self.jump_vel = self.JUMP_VELOCITY # We initialize the jumping velocity of the "doggo" to the JUMP_Velocity that we just defined before.
         self.image = self.run_img[0]  # To initialize the first image, when our "doggo" is created
         self.doggo_rectangle = self.image.get_rect()  # To get the rectangle of the "doggo" image (hitbox).
 
         # To set the x and y coord of the rectangle of the "doggo" image to the x and y coord of lines 61-62. 
-        self.doggo_rectangle.x = self.X_Position
-        self.doggo_rectangle.y = self.Y_Position
+        self.doggo_rectangle.x = self.X_POSITION
+        self.doggo_rectangle.y = self.Y_POSITION
 
     def update(self, UserInput, death = False):    # Update function, it updates the "doggo" on every while loop iteration.
         if death:
@@ -125,7 +125,7 @@ class doggo:
         elif not (self.doggo_jump or UserInput[pygame.K_DOWN]) and not death:
         # If the "doggo" is not jumping and the UserInput is not down so the "doggo"
         # is not ducking then we want the "doggo" to just run and the others are False.
-            self.doggo_run = True  # (Probar poner UserInput[pygame.K_UP] en vez de self.doggo_jump en la linea anterior)
+            self.doggo_run = True
             self.doggo_jump = False
             self.doggo_duck = False
             self.doggo_dead = False
@@ -141,8 +141,8 @@ class doggo:
                                                         # running in order to make it look like it's being animated.
         self.doggo_rectangle = self.image.get_rect()    # To get the rectangle coord of the "doggo" image.
         
-        self.doggo_rectangle.x = self.X_Position        # To set the rectangle coord to the position on the
-        self.doggo_rectangle.y = self.Y_Position        # screen where we want the "doggo" to be displayed.
+        self.doggo_rectangle.x = self.X_POSITION        # To set the rectangle coord to the position on the
+        self.doggo_rectangle.y = self.Y_POSITION        # screen where we want the "doggo" to be displayed.
         self.step_index += 1                            # Increment the step_index by 1.
                                                         # When the step_index is between the values 0 and 5 the first image of our "doggo" is displayed
                                                         # and when the step_index is between the values 5 and 10 the second image of our "doggo" is displayed.
@@ -156,21 +156,21 @@ class doggo:
             # Remember, when "doggo" leaves the floor for the jump, its velocity is 9.5 pixel/while loop iteration. At the top of the jump its
             # velocity is 0 and then when "doggo" moves down again and reaches the same position at the beggining, its velocity will be 9.5 again,
             # but now the velocity vector points down, so now it is -9.5.
-        if self.jump_vel < -self.JUMP_Velocity:  # As soon as the velocity of "doggo" reaches the value of -9.5 we set "doggo" jump to false.
+        if self.jump_vel < -self.JUMP_VELOCITY:  # As soon as the velocity of "doggo" reaches the value of -9.5 we set "doggo" jump to false.
             self.doggo_jump = False
-            self.jump_vel = self.JUMP_Velocity    # Reset the jump velocity of "doggo".
+            self.jump_vel = self.JUMP_VELOCITY    # Reset the jump velocity of "doggo".
 
     def duck(self):   # Duck function. It is identical to the run function, but the only difference is the following:
         self.image = self.duck_img[self.step_index // 5] # We change the image of self.run_img for self.duck_img.
         self.doggo_rectangle = self.image.get_rect()
-        self.doggo_rectangle.x = self.X_Position
-        self.doggo_rectangle.y = self.Y_Position_duck    # We set the y position to Y_position_duck instead of Y_position.
+        self.doggo_rectangle.x = self.X_POSITION
+        self.doggo_rectangle.y = self.Y_POSITION_DUCK    # We set the y position to Y_position_duck instead of Y_position.
         self.step_index += 1
 
     def dead(self):
         self.image = self.dead_img
-        if self.doggo_rectangle.y > self.Y_Position:
-            self.doggo_rectangle.y = self.Y_Position
+        if self.doggo_rectangle.y > self.Y_POSITION:
+            self.doggo_rectangle.y = self.Y_POSITION
 
 
     def draw(self, SCREEN):   # This function blits the image onto the screen.
@@ -261,12 +261,13 @@ def main():
         for event in pygame.event.get(): # To exit the game safety/ We set the flag in false whenever we press the "X".
             if event.type == pygame.QUIT:
                 run = False
+                break
         SCREEN.fill((255, 228, 225)) # Fill the screen with color "pink" on every while loop iteration.
         background()
         track()
         score()
         UserInput = pygame.key.get_pressed()
-        pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2)
+        #pygame.draw.rect(SCREEN, (255, 0, 0), player.doggo_rectangle, 2)
 
         if len(obstacles) == 0:   # If the lenght of the obstacles' list is equal to 0,
             if random.randint(0, 1) == 0: # then we want to randomly create either the
@@ -276,7 +277,7 @@ def main():
 
         for obstacle in obstacles: # We call the draw and update function on every
             obstacle.draw(SCREEN)  # single obstacle on the obstacles' list.
-            pygame.draw.rect(SCREEN, (255, 0, 0), obstacle.rect, 2)
+            #pygame.draw.rect(SCREEN, (255, 0, 0), obstacle.rect, 2)
             obstacle.update()
             if player.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
                 player.update(UserInput, True)
