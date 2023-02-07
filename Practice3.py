@@ -347,7 +347,7 @@ def eval_genomes(genomes, config, tries = 0):
                     elif output[0] > 0.5 and dog.doggo_rectangle.x == dog.X_POSITION:
                         dog.doggo_run = False
                         dog.doggo_jump = False
-                        dog.doggo_duck = True 
+                        dog.doggo_duck = True
                     #if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION_DUCK and obstacle.rect.y == 287:
                     #if obstacle.rect.y == 287:
                     #else:
