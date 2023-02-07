@@ -338,11 +338,11 @@ def eval_genomes(genomes, config):
                                             obstacle.rect.midtop)))
                 #if distance((dog.doggo_rectangle.x, dog.doggo_rectangle.y), obstacle.rect.midtop) > 30:
                 for obstacle in obstacles: #350 287
-                    if obstacle.rect.y == 350:
-                        if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION:
-                            dog.doggo_run = False
-                            dog.doggo_jump = True
-                            dog.doggo_duck = False
+                    #if obstacle.rect.y == 350:
+                    if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION:
+                        dog.doggo_run = False
+                        dog.doggo_jump = True
+                        dog.doggo_duck = False
                     #if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION_DUCK and obstacle.rect.y == 287:
                     #if obstacle.rect.y == 287:
                     #else:
