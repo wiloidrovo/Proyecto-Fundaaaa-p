@@ -233,7 +233,7 @@ def distance(pos_a, pos_b):
     dy = pos_a[1]-pos_b[1]
     return math.sqrt(dx**2+dy**2)
 
-def eval_genomes(genomes, config):
+def eval_genomes(genomes, config, tries = 0):
     global game_speed, x_position_track, y_position_track, points, obstacles, x_position_back, y_position_back, dogs, ge, nets # The variable game_speed is to keep track how fast everything on our screen is moving.
     run = True   # Flag to our while loop.
     clock = pygame.time.Clock()   # Setup the clock for a decent framerate
@@ -322,6 +322,7 @@ def eval_genomes(genomes, config):
             for i, dog in enumerate(dogs):
                 if dog.doggo_rectangle.colliderect(obstacle.rect): # If the rectangle of the doggo image collides with the rectangle of an obstacle
                     ge[i].fitness -= 1
+                    tries += 1
                     remove(i)
                     #dog.update(UserInput, True)
                     #dog.draw(SCREEN)
@@ -333,7 +334,7 @@ def eval_genomes(genomes, config):
                     #menu(death_count)
 
             for i, dog in enumerate(dogs):
-                output = nets[i].activate((dog.doggo_rectangle.y,
+                output = nets[i].activate((dog.doggo_rectangle.y, dog.doggo_rectangle.x,
                                         distance((dog.doggo_rectangle.x, dog.doggo_rectangle.y),
                                             obstacle.rect.midtop)))
                 #if distance((dog.doggo_rectangle.x, dog.doggo_rectangle.y), obstacle.rect.midtop) > 30:
@@ -343,6 +344,10 @@ def eval_genomes(genomes, config):
                         dog.doggo_run = False
                         dog.doggo_jump = True
                         dog.doggo_duck = False
+                    elif output[0] > 0.5 and dog.doggo_rectangle.x == dog.X_POSITION:
+                        dog.doggo_run = False
+                        dog.doggo_jump = False
+                        dog.doggo_duck = True    
                     #if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION_DUCK and obstacle.rect.y == 287:
                     #if obstacle.rect.y == 287:
                     #else:
