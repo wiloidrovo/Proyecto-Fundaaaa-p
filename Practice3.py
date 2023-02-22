@@ -333,26 +333,21 @@ def eval_genomes(genomes, config):
                     #menu(death_count)
 
             for i, dog in enumerate(dogs):
-                output = nets[i].activate((dog.doggo_rectangle.y,
+                output = nets[i].activate((dog.doggo_rectangle.y, obstacle.rect.y,
                                         distance((dog.doggo_rectangle.x, dog.doggo_rectangle.y),
                                          obstacle.rect.midtop)))
-                #if distance((dog.doggo_rectangle.x, dog.doggo_rectangle.y), obstacle.rect.midtop) > 30:
-                #for obstacle in obstacles: #350 287
-                    #if obstacle.rect.y == 350:
-                if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION:
+                if output[0] > 0.1 and dog.doggo_rectangle.y == dog.Y_POSITION and obstacle.rect.y==350:
                     dog.doggo_run = False
                     dog.doggo_jump = True
                     dog.doggo_duck = False
-                    #elif output[0] > 0.5 and dog.doggo_rectangle.x == dog.X_POSITION:
-                    #    dog.doggo_run = False
-                    #    dog.doggo_jump = False
-                    #    dog.doggo_duck = True
-                    #if output[0] > 0.5 and dog.doggo_rectangle.y == dog.Y_POSITION_DUCK and obstacle.rect.y == 287:
-                    #if obstacle.rect.y == 287:
-                    #else:
-                    #    dog.doggo_run = False
-                    #    dog.doggo_jump = False
-                    #    dog.doggo_duck = True
+                elif output[0] > 0.1 and dog.doggo_rectangle.y == dog.Y_POSITION and obstacle.rect.y==287:
+                    dog.doggo_run = False
+                    dog.doggo_jump = False
+                    dog.doggo_duck = True
+                elif output[0] > 0.1 and dog.doggo_rectangle.y == dog.Y_POSITION_DUCK and obstacle.rect.y==350:
+                    dog.doggo_run = False
+                    dog.doggo_jump = True
+                    dog.doggo_duck = False
                 #dog.doggo_dead = False
             #dog.update(UserInput)
         # Two functions on the dogs object.

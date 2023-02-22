@@ -53,9 +53,9 @@ SHORTFAR = pygame.mixer.Sound('shortfar.wav') # Create a new Sound object from a
 
 CARTOON = pygame.mixer.Sound('cartoon.wav')
 
-MUSIC = pygame.mixer.music.load('mpb.mp3')    # Load a music file for playback.
+#MUSIC = pygame.mixer.music.load('mpb.mp3')    # Load a music file for playback.
 #MUSIC = pygame.mixer.music.load('LaLla.mp3')
-#MUSIC = pygame.mixer.music.load('HRW.mp3')
+MUSIC = pygame.mixer.music.load('HRW.mp3')
 #MUSIC = pygame.mixer.music.load('Nia.mp3')
 
 # Class to create the "doggo".
@@ -222,7 +222,7 @@ def main():
     x_position_back = 0
     y_position_back = 15
     points = 0
-    font = pygame.font.Font('Space-Explorer.ttf',35) # Font used to display the score.
+    font = pygame.font.Font('Space-Explorer.ttf', 35) # Font used to display the score.
     obstacles = []
     death_count = 0
 
