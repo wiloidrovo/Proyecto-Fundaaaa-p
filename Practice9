@@ -215,6 +215,10 @@ def main():
                 run = False
                 pygame.quit()
                 exit()
+        if points == 500:
+            run = False
+            pygame.quit()
+            exit()
 
         SCREEN.fill((255, 228, 225))
         background()
