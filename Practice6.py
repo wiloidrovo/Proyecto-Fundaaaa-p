@@ -236,6 +236,7 @@ def main():
             #xxx += 10
             if dist < x and player.doggo_rectangle.y == player.Y_POSITION and obstacle.rect.y==350:
             #if dist > player.doggo_rectangle.colliderect(obstacle.rect) and player.doggo_rectangle.y == player.Y_POSITION and obstacle.rect.y==350:
+            # Te amo peque Sele enojona c:    
                 player.doggo_run = False
                 player.doggo_jump = True
                 player.doggo_duck = False
