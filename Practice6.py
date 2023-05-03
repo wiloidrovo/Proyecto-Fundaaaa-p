@@ -205,9 +205,9 @@ def main():
             SCREEN.blit(BACKGROUND, (image_width + x_position_back, y_position_back))
             x_position_back = 0
         x_position_back -= game_speed
-    x = 215
+    x = 165
     xx = 256
-    xxx = 221
+    xxx = 180
     while run:
         for event in pygame.event.get():
             scape = pygame.key.get_pressed()
@@ -232,11 +232,8 @@ def main():
             pygame.draw.rect(SCREEN, (255, 0, 0), obstacle.rect, 2)
             obstacle.update()
             dist = distance((player.doggo_rectangle.x, player.doggo_rectangle.y),
-                                        obstacle.rect.midtop)
-            #x += 10
-            #xxx += 10
+                                        obstacle.rect.topleft)
             if dist < x and player.doggo_rectangle.y == player.Y_POSITION and obstacle.rect.y==350:
-            #if dist > player.doggo_rectangle.colliderect(obstacle.rect) and player.doggo_rectangle.y == player.Y_POSITION and obstacle.rect.y==350:
                 player.doggo_run = False
                 player.doggo_jump = True
                 player.doggo_duck = False
